@@ -39,12 +39,15 @@ def generate_launch_description():
         'launch',
         'suave.launch.py')
 
+    pkg_suave_rosa = get_package_share_directory(
+        'suave_rosa')
+
     schema_path = "[{0}, {1}]".format(
         os.path.join(pkg_rosa_kb, 'config', 'schema.tql'),
         os.path.join(pkg_rosa_kb, 'config', 'ros_schema.tql'))
 
     data_path = "[{}]".format(
-        os.path.join(pkg_rosa_kb, 'config', 'suave.tql'))
+        os.path.join(pkg_suave_rosa, 'config', 'suave.tql'))
 
     rosa_bringup = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(rosa_bringup_launch_path),
