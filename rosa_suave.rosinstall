@@ -1,0 +1,41 @@
+repositories:
+  ros_pytest:
+    type: git
+    url: https://github.com/kas-lab/ros_pytest.git
+    version: main
+  ros_typedb:
+    type: git
+    url: https://github.com/kas-lab/ros_typedb.git
+    version: main
+  rosa:
+    type: git
+    url: https://github.com/kas-lab/rosa.git
+    version: main
+  suave:
+    type: git
+    url: https://github.com/kas-lab/suave.git
+    version: main
+  bluerov2_ignition:
+    type: git
+    url: https://github.com/Rezenders/bluerov2_ignition.git
+    version: 6756666
+  mavros:
+    type: git
+    url: https://github.com/mavlink/mavros.git
+    version: 3e1adc7
+  mavros_wrapper:
+    type: git
+    url: https://github.com/remaro-network/mavros_wrapper.git
+    version: 72b9743
+  remaro_worlds:
+    type: git
+    url: https://github.com/remaro-network/remaro_worlds.git
+    version: 2650f19
+  suave:
+    type: git
+    url: https://github.com/kas-lab/suave.git
+    version: 9e6468896ce766376557ca9522d84f92b70129f1
+  ros_gz:
+    type: git
+    url: https://github.com/gazebosim/ros_gz.git
+    version: 4a5972b
