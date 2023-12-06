@@ -17,7 +17,7 @@
 #include "behaviortree_cpp/behavior_tree.h"
 #include "behaviortree_cpp/bt_factory.h"
 #include "behaviortree_cpp/utils/shared_library.h"
-#include "behaviortree_cpp/loggers/bt_zmq_publisher.h"
+// #include "behaviortree_cpp/loggers/bt_zmq_publisher.h"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -54,7 +54,7 @@ int main(int argc, char * argv[])
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
 
-  auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
+  // auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   rclcpp::Rate rate(10);
 
