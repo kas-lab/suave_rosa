@@ -4,7 +4,7 @@ insert
 $t_search_pipeline isa Task, has task-name "search_pipeline";
 
 $f0 isa Function, has function-name "generate search path";
-$f_recover_motion isa Function, has function-name "recover motion";
+$f_recover_motion isa Function, has function-name "recover motion", has always-improve true;
 
 (task:$t_search_pipeline, required-function:$f0, required-function:$f_recover_motion) isa task-requirement;
 
