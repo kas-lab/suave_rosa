@@ -46,12 +46,15 @@ add_library(action_recharge_battery_bt_node SHARED src/suave_rosa/action_recharg
 add_library(arm_thrusters_bt_node SHARED src/suave_rosa/arm_thrusters.cpp)
 add_library(set_guided_mode_bt_node SHARED src/suave_rosa/set_guided_mode.cpp)
 
+add_library(suave_mission SHARED src/suave_rosa/suave_mission.cpp)
+
 list(APPEND plugin_libs
   action_search_pipeline_bt_node
   action_inspect_pipeline_bt_node
   action_recharge_battery_bt_node
   arm_thrusters_bt_node
   set_guided_mode_bt_node
+  suave_mission
 )
 
 foreach(bt_plugin ${plugin_libs})

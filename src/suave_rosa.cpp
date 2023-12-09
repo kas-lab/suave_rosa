@@ -26,13 +26,14 @@
 #include "suave_rosa/action_inspect_pipeline.hpp"
 #include "suave_rosa/arm_thrusters.hpp"
 #include "suave_rosa/set_guided_mode.hpp"
+#include "suave_rosa/suave_mission.hpp"
 #include "rosa_plan/is_task_feasible.hpp"
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node = rclcpp::Node::make_shared("suave_rosa_bt");
+  auto node = std::make_shared<suave_rosa::SuaveMission>("suave_rosa_bt");
 
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
@@ -50,7 +51,7 @@ int main(int argc, char * argv[])
   std::string xml_file = pkgpath + "/bts/suave.xml";
 
   auto blackboard = BT::Blackboard::create();
-  blackboard->set<rclcpp::Node::SharedPtr>("node", node);
+  blackboard->set<suave_rosa::SuaveMission::SharedPtr>("node", node);
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
 
@@ -59,13 +60,18 @@ int main(int argc, char * argv[])
   rclcpp::Rate rate(10);
 
   bool finish = false;
-  while (!finish && rclcpp::ok()) {
+  while (!finish && rclcpp::ok() && !node->time_limit_reached()) {
   // while (rclcpp::ok()) {
     finish = tree.rootNode()->executeTick() == BT::NodeStatus::SUCCESS;
 
     rclcpp::spin_some(node);
     rate.sleep();
   }
+  if(node->time_limit_reached()){
+    node->end_time = node->get_clock()->now();
+  }
+
+  node->save_mission_result();
 
   rclcpp::shutdown();
   return 0;
