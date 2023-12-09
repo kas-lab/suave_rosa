@@ -43,6 +43,8 @@ include_directories(
 add_library(action_search_pipeline_bt_node SHARED src/suave_rosa/action_search_pipeline.cpp)
 add_library(action_inspect_pipeline_bt_node SHARED src/suave_rosa/action_inspect_pipeline.cpp)
 add_library(action_recharge_battery_bt_node SHARED src/suave_rosa/action_recharge_battery.cpp)
+add_library(is_pipeline_found_bt_node SHARED src/suave_rosa/is_pipeline_found.cpp)
+add_library(is_pipeline_inspected_bt_node SHARED src/suave_rosa/is_pipeline_inspected.cpp)
 add_library(arm_thrusters_bt_node SHARED src/suave_rosa/arm_thrusters.cpp)
 add_library(set_guided_mode_bt_node SHARED src/suave_rosa/set_guided_mode.cpp)
 
@@ -52,6 +54,8 @@ list(APPEND plugin_libs
   action_search_pipeline_bt_node
   action_inspect_pipeline_bt_node
   action_recharge_battery_bt_node
+  is_pipeline_found_bt_node
+  is_pipeline_inspected_bt_node
   arm_thrusters_bt_node
   set_guided_mode_bt_node
   suave_mission
@@ -66,8 +70,13 @@ add_executable(suave_rosa src/suave_rosa.cpp)
 ament_target_dependencies(suave_rosa ${dependencies})
 target_link_libraries(suave_rosa ${ZMQ_LIBRARIES} ${plugin_libs})
 
+add_executable(suave_rosa_extended src/suave_rosa_extended.cpp)
+ament_target_dependencies(suave_rosa_extended ${dependencies})
+target_link_libraries(suave_rosa_extended ${ZMQ_LIBRARIES} ${plugin_libs})
+
 install(TARGETS
   suave_rosa
+  suave_rosa_extended
   DESTINATION lib/${PROJECT_NAME}
 )
 
