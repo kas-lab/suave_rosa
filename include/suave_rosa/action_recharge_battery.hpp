@@ -43,9 +43,10 @@ public:
   }
 
 private:
-  std::chrono::system_clock::time_point _completion_time;
-
-  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr battery_charged_pub_;
+  // std::chrono::system_clock::time_point _completion_time;
+  bool _recharged = false;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr battery_level_sub;
+  void battery_level_cb(const std_msgs::msg::Bool &msg);
 };
 
 }  // namespace suave_rosa
