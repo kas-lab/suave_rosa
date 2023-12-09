@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef SUAVE_ROSA__MOCK_SEARCH_PIPELINE_HPP_
-#define SUAVE_ROSA__MOCK_SEARCH_PIPELINE_HPP_
+#ifndef SUAVE_ROSA__SEARCH_PIPELINE_HPP_
+#define SUAVE_ROSA__SEARCH_PIPELINE_HPP_
 
 #include "behaviortree_cpp/behavior_tree.h"
 #include "behaviortree_cpp/bt_factory.h"
@@ -54,4 +54,4 @@ protected:
 
 }  // namespace suave_rosa
 
-#endif  // SUAVE_ROSA__MOCK_SEARCH_PIPELINE_HPP_
+#endif  // SUAVE_ROSA__SEARCH_PIPELINE_HPP_
