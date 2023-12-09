@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4"
+      main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <RetryUntilSuccessful num_attempts="-1">
+      <Sequence>
+        <SequenceWithMemory>
+          <ArmThrusters/>
+          <SetGuidedMode/>
+        </SequenceWithMemory>
+        <Fallback>
+          <SequenceWithMemory>
+            <ReactiveSequence>
+              <IsTaskFeasible task_name="search_pipeline"/>
+              <search_pipeline/>
+            </ReactiveSequence>
+            <ReactiveSequence>
+              <IsTaskFeasible task_name="inspect_pipeline"/>
+              <inspect_pipeline/>
+            </ReactiveSequence>
+          </SequenceWithMemory>
+          <ReactiveSequence>
+            <IsTaskFeasible task_name="recharge"/>
+            <recharge/>
+          </ReactiveSequence>
+        </Fallback>
+        <ReactiveSequence>
+          <IsPipelineFound/>
+          <IsPipelineInspected/>
+        </ReactiveSequence>
+      </Sequence>
+    </RetryUntilSuccessful>
+  </BehaviorTree>
+
+  <BehaviorTree ID="inspect_tree">
+    <ReactiveSequence>
+      <IsTaskFeasible task_name="inspect_pipeline"/>
+      <inspect_pipeline/>
+    </ReactiveSequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="recharge_tree">
+    <ReactiveSequence>
+      <IsTaskFeasible task_name="recharge"/>
+      <recharge/>
+    </ReactiveSequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="search_tree">
+    <ReactiveSequence>
+      <IsTaskFeasible task_name="search_pipeline"/>
+      <search_pipeline/>
+    </ReactiveSequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="ArmThrusters"
+            editable="true"/>
+    <Condition ID="IsPipelineFound"/>
+    <Condition ID="IsPipelineInspected"/>
+    <Condition ID="IsTaskFeasible"
+               editable="true">
+      <input_port name="task_name"/>
+    </Condition>
+    <Action ID="SetGuidedMode"
+            editable="true"/>
+    <Action ID="inspect_pipeline"/>
+    <Action ID="recharge"/>
+    <Action ID="search_pipeline"/>
+  </TreeNodesModel>
+
+</root>
