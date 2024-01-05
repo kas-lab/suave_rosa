@@ -11,15 +11,15 @@ $f_recover_motion isa Function, has function-name "recover motion", has always-i
 ## Component Generate spiral search path node and configurations
 $c0 isa LifeCycleNode, has component-name "f_generate_search_path_node", has package "suave", has executable "spiral_search", has always-improve true;
 
-(function: $f0, required-component: $c0) isa function-design, has function-design-name "generate spiral search path function design", has performance 1.0;
+(function: $f0, required-component: $c0) isa function-design, has function-design-name "generate spiral search path function design";
 
 $cp0 isa ComponentParameter, has parameter-key "spiral_altitude", has parameter-value "1.0", has parameter-type 'double';
 $cp1 isa ComponentParameter, has parameter-key "spiral_altitude", has parameter-value "2.0", has parameter-type 'double';
 $cp2 isa ComponentParameter, has parameter-key "spiral_altitude", has parameter-value "3.0", has parameter-type 'double';
 
-$cc0 (component: $c0, parameter: $cp0) isa component-configuration, has component-configuration-name "low altitude", has performance 1.0;
-$cc1 (component: $c0, parameter: $cp1) isa component-configuration, has component-configuration-name "medium altitude", has performance 2.0;
-$cc2 (component: $c0, parameter: $cp2) isa component-configuration, has component-configuration-name "high altitude", has performance 3.0;
+$cc0 (component: $c0, parameter: $cp0) isa component-configuration, has component-configuration-name "low altitude", has priority 3.0;
+$cc1 (component: $c0, parameter: $cp1) isa component-configuration, has component-configuration-name "medium altitude", has priority 2.0;
+$cc2 (component: $c0, parameter: $cp2) isa component-configuration, has component-configuration-name "high altitude", has priority 1.0;
 
 $water_visibility isa EnvironmentalAttribute, has attribute-name "water_visibility";
 
@@ -38,8 +38,8 @@ $thruster5 isa Component, has component-name "c_thruster_5";
 $thruster6 isa Component, has component-name "c_thruster_6";
 
 (function: $f_recover_motion, required-component: $thruster1, required-component: $thruster2, required-component: $thruster3, required-component: $thruster4, required-component: $thruster5, required-component: $thruster6) isa function-design,
-    has function-design-name "fd_recover_motion_inactive", has performance 2.0;
-(function: $f_recover_motion, required-component: $c1) isa function-design, has function-design-name "fd_recover_motion", has performance 1.0;
+    has function-design-name "fd_recover_motion_inactive", has priority 1.0;
+(function: $f_recover_motion, required-component: $c1) isa function-design, has function-design-name "fd_recover_motion", has priority 2.0;
 
 
 # Task inspect pipeline
@@ -49,5 +49,3 @@ $f_follow_pipeline isa Function, has function-name "follow pipeline";
 
 $c2 isa LifeCycleNode, has component-name "f_follow_pipeline_node", has package "suave", has executable "follow_pipeline";
 (function: $f_follow_pipeline, required-component: $c2) isa function-design, has function-design-name "follow pipeline function design";
-
-
