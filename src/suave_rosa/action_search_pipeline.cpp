@@ -47,7 +47,7 @@ namespace suave_rosa
 
     if(_pipeline_detected == true){
       std::cout << "Async action finished: "<< this->name() << std::endl;
-      cancel_task();
+      cancel_action();
       return BT::NodeStatus::SUCCESS;
     }
     std::cout<<"Searching for pipeline! "<<std::endl;

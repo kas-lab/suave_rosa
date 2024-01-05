@@ -11,16 +11,16 @@
         <Fallback>
           <SequenceWithMemory>
             <ReactiveSequence>
-              <IsTaskFeasible task_name="search_pipeline"/>
+              <IsActionFeasible action_name="search_pipeline"/>
               <search_pipeline/>
             </ReactiveSequence>
             <ReactiveSequence>
-              <IsTaskFeasible task_name="inspect_pipeline"/>
+              <IsActionFeasible action_name="inspect_pipeline"/>
               <inspect_pipeline/>
             </ReactiveSequence>
           </SequenceWithMemory>
           <ReactiveSequence>
-            <IsTaskFeasible task_name="recharge"/>
+            <IsActionFeasible action_name="recharge"/>
             <recharge/>
           </ReactiveSequence>
         </Fallback>
@@ -34,21 +34,21 @@
 
   <BehaviorTree ID="inspect_tree">
     <ReactiveSequence>
-      <IsTaskFeasible task_name="inspect_pipeline"/>
+      <IsActionFeasible action_name="inspect_pipeline"/>
       <inspect_pipeline/>
     </ReactiveSequence>
   </BehaviorTree>
 
   <BehaviorTree ID="recharge_tree">
     <ReactiveSequence>
-      <IsTaskFeasible task_name="recharge"/>
+      <IsActionFeasible action_name="recharge"/>
       <recharge/>
     </ReactiveSequence>
   </BehaviorTree>
 
   <BehaviorTree ID="search_tree">
     <ReactiveSequence>
-      <IsTaskFeasible task_name="search_pipeline"/>
+      <IsActionFeasible action_name="search_pipeline"/>
       <search_pipeline/>
     </ReactiveSequence>
   </BehaviorTree>
@@ -59,9 +59,9 @@
             editable="true"/>
     <Condition ID="IsPipelineFound"/>
     <Condition ID="IsPipelineInspected"/>
-    <Condition ID="IsTaskFeasible"
+    <Condition ID="IsActionFeasible"
                editable="true">
-      <input_port name="task_name"/>
+      <input_port name="action_name"/>
     </Condition>
     <Action ID="SetGuidedMode"
             editable="true"/>

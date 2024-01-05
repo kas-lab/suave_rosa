@@ -30,7 +30,7 @@
 #include "suave_rosa/arm_thrusters.hpp"
 #include "suave_rosa/set_guided_mode.hpp"
 #include "suave_rosa/suave_mission.hpp"
-#include "rosa_plan/is_task_feasible.hpp"
+#include "rosa_plan/is_action_feasible.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -45,7 +45,7 @@ int main(int argc, char * argv[])
   factory.registerNodeType<suave_rosa::InspectPipeline>("inspect_pipeline");
   factory.registerNodeType<suave_rosa::RechargeBattery>("recharge");
 
-  factory.registerNodeType<rosa_plan::IsTaskFeasible>("IsTaskFeasible");
+  factory.registerNodeType<rosa_plan::IsActionFeasible>("IsActionFeasible");
   factory.registerNodeType<suave_rosa::IsPipelineFound>("IsPipelineFound");
   factory.registerNodeType<suave_rosa::IsPipelineInspected>("IsPipelineInspected");
 
