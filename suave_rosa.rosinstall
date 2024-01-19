@@ -9,7 +9,7 @@ repositories:
     version: main
   rosa:
     type: git
-    url: https://github.com/kas-lab/rosa.git
+    url: git@github.com:kas-lab/rosa.git
     version: main
   suave:
     type: git
