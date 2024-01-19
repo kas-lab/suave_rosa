@@ -10,3 +10,7 @@ rosdep install --from-paths src --ignore-src -r -y
 ```
 
 ## Running
+
+## docker Build
+
+docker build --ssh default -t suave_rosa -f docker/Dockerfile .
