@@ -1,12 +1,12 @@
 insert
 
-#Task search pipeline
-$t_search_pipeline isa Task, has task-name "search_pipeline";
+#Action search pipeline
+$a_search_pipeline isa Action, has action-name "search_pipeline";
 
 $f0 isa Function, has function-name "generate search path";
 $f_recover_motion isa Function, has function-name "recover motion", has always-improve true;
 
-(task:$t_search_pipeline, required-function:$f0, required-function:$f_recover_motion) isa task-requirement;
+(action:$a_search_pipeline, required-function:$f0, required-function:$f_recover_motion) isa functional-requirement;
 
 ## Component Generate spiral search path node and configurations
 $c0 isa LifeCycleNode, has component-name "f_generate_search_path_node", has package "suave", has executable "spiral_search", has always-improve true;
@@ -42,10 +42,10 @@ $thruster6 isa Component, has component-name "c_thruster_6";
 (function: $f_recover_motion, required-component: $c1) isa function-design, has function-design-name "fd_recover_motion", has priority 2.0;
 
 
-# Task inspect pipeline
-$t_inspect_pipeline isa Task, has task-name "inspect_pipeline";
+# Action inspect pipeline
+$a_inspect_pipeline isa Action, has action-name "inspect_pipeline";
 $f_follow_pipeline isa Function, has function-name "follow pipeline";
-(task:$t_inspect_pipeline, required-function:$f_recover_motion, required-function:$f_follow_pipeline) isa task-requirement;
+(action:$a_inspect_pipeline, required-function:$f_recover_motion, required-function:$f_follow_pipeline) isa functional-requirement;
 
 $c2 isa LifeCycleNode, has component-name "f_follow_pipeline_node", has package "suave", has executable "follow_pipeline";
 (function: $f_follow_pipeline, required-component: $c2) isa function-design, has function-design-name "follow pipeline function design";
