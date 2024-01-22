@@ -24,9 +24,9 @@ IsPipelineInspected::IsPipelineInspected(
   const BT::NodeConfig & conf)
 : BT::ConditionNode(xml_tag_name, conf), _pipeline_inspected(false)
 {
-  node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+  _node = config().blackboard->get<std::shared_ptr<suave_rosa::SuaveMission>>("node");
 
-  pipeline_inspected_sub_  = node_->create_subscription<std_msgs::msg::Bool>(
+  pipeline_inspected_sub_  = _node->create_subscription<std_msgs::msg::Bool>(
     "/pipeline/inspected",
     10,
     std::bind(&IsPipelineInspected::pipeline_inspected_cb, this, _1));

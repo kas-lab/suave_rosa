@@ -23,6 +23,8 @@
 #include "mavros_msgs/msg/state.hpp"
 #include "mavros_msgs/srv/set_mode.hpp"
 
+#include "suave_rosa/suave_mission.hpp"
+
 
 namespace suave_rosa
 {
@@ -47,7 +49,7 @@ public:
 
 protected:
   std::string mode_;
-  rclcpp::Node::SharedPtr node_;
+  suave_rosa::SuaveMission::SharedPtr _node;
   rclcpp::Client<mavros_msgs::srv::SetMode>::SharedPtr set_guided_cli_;
   rclcpp::Subscription<mavros_msgs::msg::State>::SharedPtr mavros_state_sub_;
   void state_cb(const mavros_msgs::msg::State &msg);

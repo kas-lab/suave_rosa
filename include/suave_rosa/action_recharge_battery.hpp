@@ -23,17 +23,49 @@
 
 #include "rosa_plan/rosa_action.hpp"
 
+using namespace std::placeholders;
+
 namespace suave_rosa
 {
 
-class RechargeBattery : public rosa_plan::RosaAction{
+template<class T>
+class RechargeBattery : public rosa_plan::RosaAction<T>{
 
 public:
-  RechargeBattery(const std::string& name, const BT::NodeConfig & conf);
+  RechargeBattery(
+    const std::string& name, const BT::NodeConfig & conf)
+  : rosa_plan::RosaAction<T>(name, conf)
+  {
+    battery_level_sub  = this->_node->template create_subscription<std_msgs::msg::Bool>(
+      "/battery_monitor/recharge/complete",
+      10,
+      std::bind(&RechargeBattery::battery_level_cb, this, _1));
+  };
 
-  BT::NodeStatus onStart();
+  BT::NodeStatus onStart(){
+    std::cout << "Async action starting: " << this->name() << std::endl;
+    // _completion_time = std::chrono::system_clock::now() + std::chrono::milliseconds(5000);
+    _recharged = false;
+    return rosa_plan::RosaAction<T>::onStart();
+  };
 
-  BT::NodeStatus onRunning() override;
+  BT::NodeStatus onRunning() override {
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+    if(this->_node->template time_limit_reached()){
+      std::cout << "Time limit reached. Canceling action "<< this->name() << std::endl;
+      this->cancel_action();
+      return BT::NodeStatus::FAILURE;
+    }
+
+    if(_recharged == true){
+      std::cout << "Async action finished: "<< this->name() << std::endl;
+      this->cancel_action();
+      return BT::NodeStatus::SUCCESS;
+    }
+    std::cout<<"Recharging! "<<std::endl;
+    return BT::NodeStatus::RUNNING;
+  };
 
   static BT::PortsList providedPorts()
   {
@@ -46,7 +78,9 @@ private:
   // std::chrono::system_clock::time_point _completion_time;
   bool _recharged = false;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr battery_level_sub;
-  void battery_level_cb(const std_msgs::msg::Bool &msg);
+  void battery_level_cb(const std_msgs::msg::Bool &msg){
+    _recharged = msg.data;
+  };
 };
 
 }  // namespace suave_rosa

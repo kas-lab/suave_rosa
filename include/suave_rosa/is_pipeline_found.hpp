@@ -20,6 +20,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/bool.hpp"
+#include "suave_rosa/suave_mission.hpp"
 
 namespace suave_rosa
 {
@@ -42,7 +43,7 @@ public:
 private:
   bool _pipeline_detected;
 
-  rclcpp::Node::SharedPtr node_;
+  suave_rosa::SuaveMission::SharedPtr _node;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr pipeline_detection_sub_;
 
   void pipeline_detected_cb(const std_msgs::msg::Bool &msg);

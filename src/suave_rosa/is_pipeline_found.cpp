@@ -24,9 +24,9 @@ IsPipelineFound::IsPipelineFound(
   const BT::NodeConfig & conf)
 : BT::ConditionNode(xml_tag_name, conf), _pipeline_detected(false)
 {
-  node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+  _node = config().blackboard->get<std::shared_ptr<suave_rosa::SuaveMission>>("node");
 
-  pipeline_detection_sub_  = node_->create_subscription<std_msgs::msg::Bool>(
+  pipeline_detection_sub_  = _node->create_subscription<std_msgs::msg::Bool>(
     "/pipeline/detected",
     10,
     std::bind(&IsPipelineFound::pipeline_detected_cb, this, _1));

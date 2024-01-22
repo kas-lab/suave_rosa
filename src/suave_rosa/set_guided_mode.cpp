@@ -24,10 +24,10 @@ namespace suave_rosa
     const std::string& name, const BT::NodeConfig & conf)
   : BT::StatefulActionNode(name, conf)
   {
-    node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
-    set_guided_cli_ = node_->create_client<mavros_msgs::srv::SetMode>(
+    _node = config().blackboard->get<std::shared_ptr<suave_rosa::SuaveMission>>("node");
+    set_guided_cli_ = _node->create_client<mavros_msgs::srv::SetMode>(
       "mavros/set_mode");
-    mavros_state_sub_  = node_->create_subscription<mavros_msgs::msg::State>(
+    mavros_state_sub_  = _node->create_subscription<mavros_msgs::msg::State>(
       "mavros/state",
       10,
       std::bind(&SetGuidedMode::state_cb, this, _1));
@@ -49,7 +49,7 @@ namespace suave_rosa
       auto set_guided_result_ = set_guided_cli_->async_send_request(request);
 
       // Wait for the result.
-      if (rclcpp::spin_until_future_complete(node_, set_guided_result_, std::chrono::milliseconds(1000)) ==
+      if (rclcpp::spin_until_future_complete(_node, set_guided_result_, std::chrono::milliseconds(1000)) ==
         rclcpp::FutureReturnCode::SUCCESS)
       {
         auto result_ = set_guided_result_.get();

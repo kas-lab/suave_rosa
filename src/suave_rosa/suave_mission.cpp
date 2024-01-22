@@ -17,48 +17,48 @@
 namespace suave_rosa
 {
   using namespace std::placeholders;
+  using namespace std::chrono_literals;
 
   SuaveMission::SuaveMission(std::string none_name): Node(none_name){
-    distance_inspected_sub_  = this->create_subscription<std_msgs::msg::Float32>(
-      "/pipeline/distance_inspected",
-      10,
-      std::bind(&SuaveMission::distance_inspected_cb, this, _1));
-
     this->declare_parameter("time_limit", 300);
-    this->declare_parameter("result_path", "~/suave/results");
-    this->declare_parameter("result_filename", "mission_results");
-
     _time_limit = this->get_parameter("time_limit").as_int();
+
+    save_mission_results_cli =
+      this->create_client<std_srvs::srv::Empty>("mission_metrics/save");
   }
 
-  void SuaveMission::distance_inspected_cb(const std_msgs::msg::Float32 &msg){
-    _distance_inspected = msg.data;
-  }
 
   bool SuaveMission::time_limit_reached(){
     if(_search_started){
-      return (this->get_clock()->now() - start_time) >= rclcpp::Duration(_time_limit, 0);
+      return (this->get_clock()->now() - _start_time) >= rclcpp::Duration(_time_limit, 0);
     }
     return false;
   }
 
-  void SuaveMission::save_mission_result(){
-    // TODO: save csv with the following header
-    // self.metrics_header = [
-    // 'mission_name' == _mission_name + now_str,
-    // 'datetime' == now_str,
-    // 'initial pos (x,y)' I think this can be ingored for now,
-    // 'time budget (s)', == time_limit
-    // 'time search (s)' == end_search_time - start_time,
-    // 'distance inspected (m)' == distance_inspected]
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
+  bool SuaveMission::request_save_mission_results(){
+    while (!save_mission_results_cli->wait_for_service(1s)) {
+      if (!rclcpp::ok()) {
+        RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+        return false;
+      }
+      RCLCPP_INFO(this->get_logger(), "mission_metrics/save service not available, waiting again...");
+    }
 
-    std::ostringstream oss;
-    oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
-    auto now_str = oss.str();
-
-    auto result_path = this->get_parameter("result_path").as_string();
-    auto result_filename = this->get_parameter("result_filename").as_string();
+    auto request = std::make_shared<std_srvs::srv::Empty::Request>();
+    auto response = save_mission_results_cli->async_send_request(request);
+    if (rclcpp::spin_until_future_complete(this->get_node_base_interface(), response) ==
+      rclcpp::FutureReturnCode::SUCCESS)
+    {
+      return true;
+    } else {
+      RCLCPP_ERROR(this->get_logger(), "Failed to call service mission_metrics/save");
+      return false;
+    }
   }
+
+  void SuaveMission::set_search_started(){
+    _start_time = this->get_clock()->now();
+    _search_started = true;
+  }
+
 }

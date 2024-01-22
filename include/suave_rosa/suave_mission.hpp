@@ -22,6 +22,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float32.hpp"
+#include "std_srvs/srv/empty.hpp"
 
 namespace suave_rosa
 {
@@ -30,21 +31,17 @@ class SuaveMission : public rclcpp::Node{
 
 public:
   SuaveMission(std::string none_name);
-  rclcpp::Time start_time;
-  rclcpp::Time end_search_time;
-  rclcpp::Time end_time;
 
   bool time_limit_reached();
-  void save_mission_result();
+
+  bool request_save_mission_results();
+  void set_search_started();
 
 private:
-  std::string _mission_name = "time_constrained_rosa";
+  rclcpp::Time _start_time;
   bool _search_started = false;
-  double _distance_inspected;
   int _time_limit;
-
-  rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr distance_inspected_sub_;
-  void distance_inspected_cb(const std_msgs::msg::Float32 &msg);
+  rclcpp::Client<std_srvs::srv::Empty>::SharedPtr save_mission_results_cli;
 };
 
 }  // namespace suave_rosa

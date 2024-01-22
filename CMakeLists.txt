@@ -16,6 +16,7 @@ find_package(rclcpp REQUIRED)
 find_package(rosa_msgs REQUIRED)
 find_package(rosa_plan REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
 
 find_package(ZMQ)
 if(ZMQ_FOUND)
@@ -33,6 +34,7 @@ set(dependencies
   rosa_msgs
   rosa_plan
   std_msgs
+  std_srvs
 )
 
 include_directories(

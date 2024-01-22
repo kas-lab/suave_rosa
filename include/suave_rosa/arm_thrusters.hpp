@@ -20,6 +20,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "mavros_msgs/srv/command_bool.hpp"
+#include "suave_rosa/suave_mission.hpp"
 
 
 namespace suave_rosa
@@ -44,7 +45,7 @@ public:
   }
 
 protected:
-  rclcpp::Node::SharedPtr node_;
+  suave_rosa::SuaveMission::SharedPtr _node;
   rclcpp::Client<mavros_msgs::srv::CommandBool>::SharedPtr arm_motors_cli_;
 };
 

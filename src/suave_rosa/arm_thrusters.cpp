@@ -24,8 +24,8 @@ namespace suave_rosa
     const std::string& name, const BT::NodeConfig & conf)
   : BT::StatefulActionNode(name, conf)
   {
-    node_ = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
-    arm_motors_cli_ = node_->create_client<mavros_msgs::srv::CommandBool>(
+    _node = config().blackboard->get<std::shared_ptr<suave_rosa::SuaveMission>>("node");
+    arm_motors_cli_ = _node->create_client<mavros_msgs::srv::CommandBool>(
       "mavros/cmd/arming");
   }
 
@@ -37,7 +37,7 @@ namespace suave_rosa
       auto arm_motors_result_ = arm_motors_cli_->async_send_request(request);
 
       // Wait for the result.
-      if (rclcpp::spin_until_future_complete(node_, arm_motors_result_, std::chrono::milliseconds(100)) ==
+      if (rclcpp::spin_until_future_complete(_node, arm_motors_result_, std::chrono::milliseconds(100)) ==
         rclcpp::FutureReturnCode::SUCCESS)
       {
         auto arm_result_ = arm_motors_result_.get();

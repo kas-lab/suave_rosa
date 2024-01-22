@@ -16,41 +16,4 @@
 
 namespace suave_rosa
 {
-  using namespace std::placeholders;
-
-  SearchPipeline::SearchPipeline(
-    const std::string& name, const BT::NodeConfig & conf)
-  : rosa_plan::RosaAction(name, conf), _pipeline_detected(false)
-  {
-    pipeline_detection_sub_  = node_->create_subscription<std_msgs::msg::Bool>(
-      "/pipeline/detected",
-      10,
-      std::bind(&SearchPipeline::pipeline_detected_cb, this, _1));
-  }
-
-  void
-  SearchPipeline::pipeline_detected_cb(const std_msgs::msg::Bool &msg)
-  {
-    _pipeline_detected = msg.data;
-  }
-
-  BT::NodeStatus SearchPipeline::onStart(){
-    return rosa_plan::RosaAction::onStart();
-  }
-
-  void SearchPipeline::onHalted(){
-    rosa_plan::RosaAction::onHalted();
-  }
-
-  BT::NodeStatus SearchPipeline::onRunning(){
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-    if(_pipeline_detected == true){
-      std::cout << "Async action finished: "<< this->name() << std::endl;
-      cancel_action();
-      return BT::NodeStatus::SUCCESS;
-    }
-    std::cout<<"Searching for pipeline! "<<std::endl;
-    return BT::NodeStatus::RUNNING;
-  }
 } //namespace suave_rosa

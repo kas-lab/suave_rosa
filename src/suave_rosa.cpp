@@ -17,7 +17,6 @@
 #include "behaviortree_cpp/behavior_tree.h"
 #include "behaviortree_cpp/bt_factory.h"
 #include "behaviortree_cpp/utils/shared_library.h"
-// #include "behaviortree_cpp/loggers/bt_zmq_publisher.h"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -33,16 +32,16 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<suave_rosa::SuaveMission>("suave_rosa_bt");
+  std::shared_ptr<suave_rosa::SuaveMission> node = std::make_shared<suave_rosa::SuaveMission>("suave_rosa_bt");
 
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
 
-  factory.registerNodeType<suave_rosa::SearchPipeline>("search_pipeline");
-  factory.registerNodeType<suave_rosa::InspectPipeline>("inspect_pipeline");
-  factory.registerNodeType<suave_rosa::RechargeBattery>("recharge");
+  factory.registerNodeType<suave_rosa::SearchPipeline<std::shared_ptr<suave_rosa::SuaveMission>>>("search_pipeline");
+  factory.registerNodeType<suave_rosa::InspectPipeline<std::shared_ptr<suave_rosa::SuaveMission>>>("inspect_pipeline");
+  factory.registerNodeType<suave_rosa::RechargeBattery<std::shared_ptr<suave_rosa::SuaveMission>>>("recharge");
 
-  factory.registerNodeType<rosa_plan::IsActionFeasible>("IsActionFeasible");
+  factory.registerNodeType<rosa_plan::IsActionFeasible<std::shared_ptr<suave_rosa::SuaveMission>>>("IsActionFeasible");
 
   factory.registerNodeType<suave_rosa::ArmThrusters>("ArmThrusters");
   factory.registerNodeType<suave_rosa::SetGuidedMode>("SetGuidedMode");
@@ -51,27 +50,24 @@ int main(int argc, char * argv[])
   std::string xml_file = pkgpath + "/bts/suave.xml";
 
   auto blackboard = BT::Blackboard::create();
-  blackboard->set<suave_rosa::SuaveMission::SharedPtr>("node", node);
+  blackboard->set<std::shared_ptr<suave_rosa::SuaveMission>>("node", node);
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
-
-  // auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   rclcpp::Rate rate(10);
 
   bool finish = false;
-  while (!finish && rclcpp::ok() && !node->time_limit_reached()) {
-  // while (rclcpp::ok()) {
-    finish = tree.rootNode()->executeTick() == BT::NodeStatus::SUCCESS;
+  while (!finish && rclcpp::ok()) {
+    if(node->time_limit_reached()){
+      node->request_save_mission_results();
+      tree.haltTree();
+      break;
+    }
 
+    finish = tree.rootNode()->executeTick() == BT::NodeStatus::SUCCESS;
     rclcpp::spin_some(node);
     rate.sleep();
   }
-  if(node->time_limit_reached()){
-    node->end_time = node->get_clock()->now();
-  }
-
-  node->save_mission_result();
 
   rclcpp::shutdown();
   return 0;

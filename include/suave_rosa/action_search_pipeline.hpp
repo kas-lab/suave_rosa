@@ -23,20 +23,47 @@
 
 #include "rosa_plan/rosa_action.hpp"
 
+using namespace std::placeholders;
 
 namespace suave_rosa
 {
 
-class SearchPipeline : public rosa_plan::RosaAction{
+template<class T>
+class SearchPipeline : public rosa_plan::RosaAction<T>{
 
 public:
-  SearchPipeline(const std::string& name, const BT::NodeConfig & conf);
+  SearchPipeline(
+    const std::string& name, const BT::NodeConfig & conf)
+  : rosa_plan::RosaAction<T>(name, conf), _pipeline_detected(false)
+  {
+    pipeline_detection_sub_  = this->_node->template create_subscription<std_msgs::msg::Bool>(
+      "/pipeline/detected",
+      10,
+      std::bind(&SearchPipeline::pipeline_detected_cb, this, _1));
+  };
 
-  BT::NodeStatus onStart();
+  BT::NodeStatus onStart(){
+    this->_node->template set_search_started();
+    return rosa_plan::RosaAction<T>::onStart();
+  };
 
-  BT::NodeStatus onRunning() override;
+  BT::NodeStatus onRunning() override{
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-  void onHalted();
+    if(this->_node->template time_limit_reached()){
+      std::cout << "Time limit reached. Canceling action "<< this->name() << std::endl;
+      this->cancel_action();
+      return BT::NodeStatus::FAILURE;
+    }
+
+    if(_pipeline_detected == true){
+      std::cout << "Async action finished: "<< this->name() << std::endl;
+      this->cancel_action();
+      return BT::NodeStatus::SUCCESS;
+    }
+    std::cout<<"Searching for pipeline! "<<std::endl;
+    return BT::NodeStatus::RUNNING;
+  };
 
   static BT::PortsList providedPorts()
   {
@@ -49,7 +76,9 @@ protected:
   bool _pipeline_detected;
 
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr pipeline_detection_sub_;
-  void pipeline_detected_cb(const std_msgs::msg::Bool &msg);
+  void pipeline_detected_cb(const std_msgs::msg::Bool &msg){
+    _pipeline_detected = msg.data;
+  };
 };
 
 }  // namespace suave_rosa

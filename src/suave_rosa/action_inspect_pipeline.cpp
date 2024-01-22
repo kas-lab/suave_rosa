@@ -16,44 +16,4 @@
 
 namespace suave_rosa
 {
-  using namespace std::placeholders;
-
-  InspectPipeline::InspectPipeline(
-    const std::string& name, const BT::NodeConfig & conf)
-  : rosa_plan::RosaAction(name, conf), _pipeline_inspected(false)
-  {
-    pipeline_inspected_sub_  = node_->create_subscription<std_msgs::msg::Bool>(
-      "/pipeline/inspected",
-      10,
-      std::bind(&InspectPipeline::pipeline_inspected_cb, this, _1));
-  }
-
-  void
-  InspectPipeline::pipeline_inspected_cb(const std_msgs::msg::Bool &msg)
-  {
-    _pipeline_inspected = msg.data;
-  }
-
-  BT::NodeStatus InspectPipeline::onStart()
-  {
-    return rosa_plan::RosaAction::onStart();
-  }
-
-  void InspectPipeline::onHalted(){
-    rosa_plan::RosaAction::onHalted();
-  }
-
-  BT::NodeStatus InspectPipeline::onRunning()
-  {
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-    if(_pipeline_inspected==true){
-      std::cout << "Async action finished: "<< this->name() << std::endl;
-      cancel_action();
-      return BT::NodeStatus::SUCCESS;
-    }
-    std::cout<<"Inspecting pipeline! "<<std::endl;
-    return BT::NodeStatus::RUNNING;
-  }
-
 } //namespace suave_rosa
