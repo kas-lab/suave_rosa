@@ -39,7 +39,7 @@ then
     ros2 launch suave_missions mission.launch.py adaptation_manager:=$MANAGER mission_type:=$MTYPE result_filename:=$3
 elif  [ "$1" == "rosa" ]
 then
-    typedb server &
+    xfce4-terminal --execute typedb server &
     ros2 launch suave_rosa suave_rosa.launch.py mission_type:=$MTYPE result_filename:=$3
 else
     echo "adaptation_manager invalid or missing"

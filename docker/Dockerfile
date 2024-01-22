@@ -41,5 +41,6 @@ RUN sudo apt autoremove -y && sudo rm -rf /var/lib/apt/lists/
 
 COPY --chown=kasm-user:kasm-user ./runner/ $HOME/suave_ws/src/suave/runner/
 RUN chmod +x $HOME/suave_ws/src/suave/runner/rosa_runner.sh
+RUN chmod +x $HOME/suave_ws/src/suave/runner/rosa_conf_results_run.sh
 RUN chmod +x $HOME/suave_ws/src/suave/runner/scripts/launch_mission.sh
 WORKDIR $HOME/suave_ws/src/suave/runner
