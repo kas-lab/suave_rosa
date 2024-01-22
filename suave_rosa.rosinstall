@@ -34,7 +34,7 @@ repositories:
   suave:
     type: git
     url: https://github.com/kas-lab/suave.git
-    version: 9e6468896ce766376557ca9522d84f92b70129f1
+    version: main
   ros_gz:
     type: git
     url: https://github.com/gazebosim/ros_gz.git
