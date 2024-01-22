@@ -81,21 +81,22 @@ def generate_launch_description():
         }.items()
     )
 
+    mission_config = os.path.join(
+        get_package_share_directory('suave_rosa'),
+        'config',
+        'mission_config.yaml'
+    )
+
     suave_rosa_bt_node = Node(
         package='suave_rosa',
         executable='suave_rosa',
+        parameters=[mission_config]
     )
 
     suave_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(suave_launch_path),
         launch_arguments={
             'task_bridge': 'False'}.items()
-    )
-
-    mission_config = os.path.join(
-        get_package_share_directory('suave_missions'),
-        'config',
-        'mission_config.yaml'
     )
 
     mission_metrics_node = Node(
