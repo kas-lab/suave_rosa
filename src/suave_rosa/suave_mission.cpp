@@ -30,6 +30,7 @@ namespace suave_rosa
 
   bool SuaveMission::time_limit_reached(){
     if(_search_started){
+      std::cout << "Time limit reached!"<< std::endl;
       return (this->get_clock()->now() - _start_time) >= rclcpp::Duration(_time_limit, 0);
     }
     return false;

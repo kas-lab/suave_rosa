@@ -61,10 +61,10 @@ int main(int argc, char * argv[])
     if(node->time_limit_reached()){
       node->request_save_mission_results();
       tree.haltTree();
-      break;
+      finish = true;
+    } else{
+      finish = tree.rootNode()->executeTick() == BT::NodeStatus::SUCCESS;
     }
-
-    finish = tree.rootNode()->executeTick() == BT::NodeStatus::SUCCESS;
     rclcpp::spin_some(node);
     rate.sleep();
   }
