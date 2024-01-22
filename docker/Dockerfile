@@ -17,7 +17,6 @@ COPY --chown=kasm-user:kasm-user ./cmake/ $HOME/suave_ws/src/suave_rosa/cmake/
 COPY --chown=kasm-user:kasm-user ./config/ $HOME/suave_ws/src/suave_rosa/config/
 COPY --chown=kasm-user:kasm-user ./include/ $HOME/suave_ws/src/suave_rosa/include/
 COPY --chown=kasm-user:kasm-user ./launch/ $HOME/suave_ws/src/suave_rosa/launch/
-COPY --chown=kasm-user:kasm-user ./runner/ $HOME/suave_ws/src/suave_rosa/runner/
 COPY --chown=kasm-user:kasm-user ./src/ $HOME/suave_ws/src/suave_rosa/src/
 COPY --chown=kasm-user:kasm-user CMakeLists.txt $HOME/suave_ws/src/suave_rosa/CMakeLists.txt
 COPY --chown=kasm-user:kasm-user package.xml $HOME/suave_ws/src/suave_rosa/package.xml
@@ -39,3 +38,8 @@ RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash \
     && echo 'source ~/suave_ws/install/setup.bash' >> ~/.bashrc"]
 
 RUN sudo apt autoremove -y && sudo rm -rf /var/lib/apt/lists/
+
+COPY --chown=kasm-user:kasm-user ./runner/ $HOME/suave_ws/src/suave/runner/
+RUN chmod +x $HOME/suave_ws/src/suave/runner/rosa_runner.sh
+RUN chmod +x $HOME/suave_ws/src/suave/runner/scripts/launch_mission.sh
+WORKDIR $HOME/suave_ws/src/suave/runner
