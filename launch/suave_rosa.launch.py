@@ -82,7 +82,7 @@ def generate_launch_description():
     )
 
     mission_config = os.path.join(
-        get_package_share_directory('suave_rosa'),
+        get_package_share_directory('suave_missions'),
         'config',
         'mission_config.yaml'
     )

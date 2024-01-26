@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  std::shared_ptr<suave_rosa::SuaveMission> node = std::make_shared<suave_rosa::SuaveMission>("suave_rosa_bt");
+  std::shared_ptr<suave_rosa::SuaveMission> node = std::make_shared<suave_rosa::SuaveMission>("mission_node");
 
   BT::BehaviorTreeFactory factory;
   BT::SharedLibrary loader;
