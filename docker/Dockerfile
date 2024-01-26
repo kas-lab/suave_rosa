@@ -1,4 +1,4 @@
-FROM suave:dev
+FROM ghcr.io/kas-lab/suave:main
 
 RUN sudo apt update \
     && sudo apt install -y \
