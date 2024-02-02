@@ -17,7 +17,7 @@ git clone git@github.com:kas-lab/suave_rosa.git
 Get dependencies:
 ```bash
 source /opt/ros/humble/setup.bash
-vcs import src < rosa_suave.rosinstall --recursive
+vcs import src < suave_rosa.rosinstall --recursive
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
@@ -55,7 +55,7 @@ ros2 launch suave_rosa suave_rosa_extended.launch.py mission_type:=time_constrai
 
 The SUAVE docker image was extended to include ROSA. You can find additional information about the original SUAVE image in the SUAVE repo.
 
-Run with docker:
+Run with docker **DOCKER IMAGE IS NOT AVAILABLE DUE TO DOUBLE-BLIND REVIEW. IT WILL BE AVAILABLE AFTER REVIEW.**:
 ```bash
 docker run -it --shm-size=512m -v $HOME/rss_results:/home/kasm-user/suave/results -p 6901:6901 -e VNC_PW=password --security-opt seccomp=unconfined ghcr.io/kas-lab/suave_rosa:main
 ```
