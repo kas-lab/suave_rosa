@@ -16,28 +16,28 @@ $c_generate_recharge_path_node isa LifeCycleNode, has component-name "recharge_b
 ## end recharge action
 
 $battery_level_qa isa QualityAttribute, has attribute-name "battery_level";
-$battery_consumption_qa isa QualityAttribute, has attribute-name "battery_consumption";
+#$battery_consumption_qa isa QualityAttribute, has attribute-name "battery_consumption";
 
-$light isa Component, has component-name "light";
+#$light isa Component, has component-name "light";
 
 # value is from 0.0 (off) to 1.0 (max)
-$zero_brightness isa ComponentParameter, has parameter-key "brightness", has parameter-value "0.0";
-$low_brightness isa ComponentParameter, has parameter-key "brightness", has parameter-value "0.5";
-$high_brightness isa ComponentParameter, has parameter-key "brightness", has parameter-value "1.0";
+#$zero_brightness isa ComponentParameter, has parameter-key "brightness", has parameter-value "0.0";
+#$low_brightness isa ComponentParameter, has parameter-key "brightness", has parameter-value "0.5";
+#$high_brightness isa ComponentParameter, has parameter-key "brightness", has parameter-value "1.0";
 
-$light_zero_brightness (component: $light, parameter: $zero_brightness) isa component-configuration, has component-configuration-name "zero brightness";
-$light_low_brightness (component: $light, parameter: $low_brightness) isa component-configuration, has component-configuration-name "low brightness";
-$light_high_brightness (component: $light, parameter: $high_brightness) isa component-configuration, has component-configuration-name "high brightness";
+#$light_zero_brightness (component: $light, parameter: $zero_brightness) isa component-configuration, has component-configuration-name "zero brightness";
+#$light_low_brightness (component: $light, parameter: $low_brightness) isa component-configuration, has component-configuration-name "low brightness";
+#$light_high_brightness (component: $light, parameter: $high_brightness) isa component-configuration, has component-configuration-name "high brightness";
 
 # value in watts
-$light_zero_brightnes_bat_consumption (causer: $light_zero_brightness, affected: $battery_consumption_qa) isa estimation, has estimation-value 0.0, has estimation-type "positive";
-$light_low_brightnes_bat_consumption (causer: $light_low_brightness, affected: $battery_consumption_qa) isa estimation, has estimation-value 30.0, has estimation-type "positive";
-$light_high_brightnes_bat_consumption (causer: $light_high_brightness, affected: $battery_consumption_qa) isa estimation, has estimation-value 60.0, has estimation-type "positive";
+#$light_zero_brightnes_bat_consumption (causer: $light_zero_brightness, affected: $battery_consumption_qa) isa estimation, has estimation-value 0.0, has estimation-type "positive";
+#$light_low_brightnes_bat_consumption (causer: $light_low_brightness, affected: $battery_consumption_qa) isa estimation, has estimation-value 30.0, has estimation-type "positive";
+#$light_high_brightnes_bat_consumption (causer: $light_high_brightness, affected: $battery_consumption_qa) isa estimation, has estimation-value 60.0, has estimation-type "positive";
 
-$light_zero_brightnes_water_visbility (causer: $light_zero_brightness, affected: $water_visibility) isa estimation, has estimation-value 0.0, has estimation-type "positive";
-$light_low_brightnes_water_visbility (causer: $light_low_brightness, affected: $water_visibility) isa estimation, has estimation-value 0.5, has estimation-type "positive";
-$light_high_brightnes_water_visbility (causer: $light_high_brightness, affected: $water_visibility) isa estimation, has estimation-value 0.90, has estimation-type "positive";
+#$light_zero_brightnes_water_visbility (causer: $light_zero_brightness, affected: $water_visibility) isa estimation, has estimation-value 0.0, has estimation-type "positive";
+#$light_low_brightnes_water_visbility (causer: $light_low_brightness, affected: $water_visibility) isa estimation, has estimation-value 0.5, has estimation-type "positive";
+#$light_high_brightnes_water_visbility (causer: $light_high_brightness, affected: $water_visibility) isa estimation, has estimation-value 0.90, has estimation-type "positive";
 
 # Actions constraints
-(constraint: $battery_level_qa, constrained: $a_search_pipeline) isa constrainment, has attribute-value 0.25;
-(constraint: $battery_level_qa, constrained: $a_inspect_pipeline) isa constrainment, has attribute-value 0.25;
+(constraint: $battery_level_qa, constrained: $a_search_pipeline) isa constraint, has attribute-value 0.25;
+(constraint: $battery_level_qa, constrained: $a_inspect_pipeline) isa constraint, has attribute-value 0.25;
