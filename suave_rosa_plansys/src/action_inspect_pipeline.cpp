@@ -11,9 +11,34 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+#include "std_msgs/msg/bool.hpp"
 #include "rosa_task_plan_plansys/rosa_action.hpp"
 
 using namespace std::chrono_literals;
+using namespace std::placeholders;
+
+class InspectPipelineAction : public rosa_task_plan_plansys::RosaAction{
+public:
+  InspectPipelineAction(const std::string & node_name,
+    const std::chrono::nanoseconds & rate) : RosaAction(node_name, rate){
+      pipeline_inspected_sub_  = this->create_subscription<std_msgs::msg::Bool>(
+        "/pipeline/inspected",
+        10,
+        std::bind(&InspectPipelineAction::pipeline_inspected_cb, this, _1));
+  };
+
+private:
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr pipeline_inspected_sub_;
+
+  bool _pipeline_inspected=false;
+  void pipeline_inspected_cb(const std_msgs::msg::Bool &msg){
+    _pipeline_inspected = msg.data;
+  };
+
+  void do_work(){
+    if(_pipeline_inspected==true) finish(true, 1.0, "Pipeline inspected!");
+  };
+};
 
 int main(int argc, char ** argv)
 {
@@ -21,7 +46,6 @@ int main(int argc, char ** argv)
   auto node = std::make_shared<rosa_task_plan_plansys::RosaAction>(
     "inspect_pipeline", 500ms);
 
-  // node->set_parameter(rclcpp::Parameter("action_name", "inspect_pipeline"));
   node->trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
   rclcpp::executors::MultiThreadedExecutor executor;

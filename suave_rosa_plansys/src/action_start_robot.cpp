@@ -22,11 +22,17 @@ namespace suave_rosa_plansys
     const std::chrono::nanoseconds & rate)
   :   plansys2::ActionExecutorClient(node_name, rate)
   {
+    callback_group_srv_client_ = create_callback_group(
+      rclcpp::CallbackGroupType::MutuallyExclusive);
     arm_motors_cli_ = this->create_client<mavros_msgs::srv::CommandBool>(
-      "mavros/cmd/arming");
+      "mavros/cmd/arming",
+      rmw_qos_profile_services_default,
+      callback_group_srv_client_);
 
     set_guided_cli_ = this->create_client<mavros_msgs::srv::SetMode>(
-      "mavros/set_mode");
+      "mavros/set_mode",
+      rmw_qos_profile_services_default,
+      callback_group_srv_client_);
     mavros_state_sub_  = this->create_subscription<mavros_msgs::msg::State>(
       "mavros/state",
       10,
@@ -35,19 +41,6 @@ namespace suave_rosa_plansys
 
   StartRobot::~StartRobot()
   {
-  }
-
-  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  StartRobot::on_activate(const rclcpp_lifecycle::State & previous_state)
-  {
-    RCLCPP_INFO(this->get_logger(), "Starting robot!");
-    return ActionExecutorClient::on_activate(previous_state);
-  }
-
-  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  StartRobot::on_deactivate(const rclcpp_lifecycle::State & previous_state)
-  {
-    return ActionExecutorClient::on_deactivate(previous_state);
   }
 
   void StartRobot::arm_thrusters(){
@@ -96,6 +89,7 @@ namespace suave_rosa_plansys
         if(result_->mode_sent && mode_ == "GUIDED"){
           guided_ = true;
           RCLCPP_INFO(this->get_logger(), "Mode set to GUIDED!");
+          finish(true, 1.0, "Robot in guided mode and armed!");
           return;
         }
       }
@@ -122,7 +116,6 @@ int main(int argc, char ** argv)
   auto node = std::make_shared<suave_rosa_plansys::StartRobot>(
     "start_robot", 500ms);
 
-  // node->set_parameter(rclcpp::Parameter("action_name", "inspect_pipeline"));
   node->trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
   rclcpp::executors::MultiThreadedExecutor executor;

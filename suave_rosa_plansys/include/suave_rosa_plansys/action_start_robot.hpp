@@ -33,16 +33,12 @@ public:
 
   virtual ~StartRobot();
 
-  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  on_activate(const rclcpp_lifecycle::State & previous_state);
-
-  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  on_deactivate(const rclcpp_lifecycle::State & previous_state);
-
 private:
   bool armed_ = false;
   bool guided_ = false;
   std::string mode_;
+
+  rclcpp::CallbackGroup::SharedPtr callback_group_srv_client_;
 
   rclcpp::Client<mavros_msgs::srv::CommandBool>::SharedPtr arm_motors_cli_;
 
