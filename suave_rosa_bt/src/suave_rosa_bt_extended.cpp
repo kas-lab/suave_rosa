@@ -26,6 +26,8 @@
 #include "suave_rosa_bt/arm_thrusters.hpp"
 #include "suave_rosa_bt/set_guided_mode.hpp"
 #include "suave_rosa_bt/suave_mission.hpp"
+#include "suave_rosa_bt/is_pipeline_found.hpp"
+#include "suave_rosa_bt/is_pipeline_inspected.hpp"
 #include "rosa_plan/is_action_feasible.hpp"
 
 int main(int argc, char * argv[])
@@ -42,6 +44,8 @@ int main(int argc, char * argv[])
   factory.registerNodeType<suave_rosa_bt::RechargeBattery<std::shared_ptr<suave_rosa_bt::SuaveMission>>>("recharge");
 
   factory.registerNodeType<rosa_plan::IsActionFeasible<std::shared_ptr<suave_rosa_bt::SuaveMission>>>("IsActionFeasible");
+  factory.registerNodeType<suave_rosa_bt::IsPipelineFound>("IsPipelineFound");
+  factory.registerNodeType<suave_rosa_bt::IsPipelineInspected>("IsPipelineInspected");
 
   factory.registerNodeType<suave_rosa_bt::ArmThrusters>("ArmThrusters");
   factory.registerNodeType<suave_rosa_bt::SetGuidedMode>("SetGuidedMode");
