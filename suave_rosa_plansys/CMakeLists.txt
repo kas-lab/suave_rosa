@@ -35,6 +35,9 @@ ament_target_dependencies(action_inspect_pipeline ${dependencies})
 add_executable(action_start_robot src/action_start_robot.cpp)
 ament_target_dependencies(action_start_robot ${dependencies})
 
+add_executable(action_recharge src/action_recharge.cpp)
+ament_target_dependencies(action_recharge ${dependencies})
+
 add_executable(suave_rosa_controller src/suave_rosa_controller.cpp)
 ament_target_dependencies(suave_rosa_controller ${dependencies})
 
@@ -43,6 +46,7 @@ install(TARGETS
   action_search_pipeline
   action_inspect_pipeline
   action_start_robot
+  action_recharge
   suave_rosa_controller
   DESTINATION lib/${PROJECT_NAME}
 )
