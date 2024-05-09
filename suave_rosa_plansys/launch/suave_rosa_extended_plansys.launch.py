@@ -57,13 +57,18 @@ def generate_launch_description():
         'mission_config.yaml'
     )
 
+    data_path_ = "[{0}, {1}]".format(
+        os.path.join(pkg_suave_rosa, 'config', 'suave.tql'),
+        os.path.join(pkg_suave_rosa, 'config', 'suave_extended.tql'),
+    )
     suave_rosa_base = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(suave_rosa_base_launch_path),
         launch_arguments={
             'mission_type': mission_type,
             'result_filename': result_filename,
             'mission_config': mission_config,
-            'db_name': 'suave_rosa_plansys',
+            'db_name': 'suave_rosa_extended_plansys',
+            'data_path': data_path_
         }.items()
     )
 
@@ -78,7 +83,7 @@ def generate_launch_description():
                 'model_file':
                     suave_rosa_plansys_path + '/pddl/suave_domain.pddl',
                 'problem_file':
-                    suave_rosa_plansys_path + '/pddl/suave_problem.pddl',
+                    suave_rosa_plansys_path + '/pddl/suave_extended_problem.pddl',
             }.items()
         )
 
@@ -86,7 +91,8 @@ def generate_launch_description():
         package='suave_rosa_plansys',
         executable='suave_rosa_controller',
         # parameters=[mission_config]
-        parameters=[{'rosa_actions': ['search_pipeline', 'inspect_pipeline']}]
+        parameters=[{'rosa_actions': [
+            'search_pipeline', 'inspect_pipeline', 'recharge']}]
     )
 
     start_robot_pddl_action_node = Node(
@@ -110,6 +116,13 @@ def generate_launch_description():
         parameters=[{'action_name': 'inspect_pipeline'}]
     )
 
+    recharge_pddl_action_node = Node(
+        package='suave_rosa_plansys',
+        executable='action_recharge',
+        # parameters=[mission_config]
+        parameters=[{'action_name': 'recharge'}]
+    )
+
     return LaunchDescription([
         mission_type_arg,
         result_filename_arg,
@@ -119,4 +132,5 @@ def generate_launch_description():
         start_robot_pddl_action_node,
         search_pipeline_pddl_action_node,
         inspect_pipeline_pddl_action_node,
+        recharge_pddl_action_node,
     ])
