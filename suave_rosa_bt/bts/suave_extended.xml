@@ -3,32 +3,40 @@
       main_tree_to_execute="MainTree">
   <BehaviorTree ID="MainTree">
     <RetryUntilSuccessful num_attempts="-1">
-      <Sequence>
+      <SequenceWithMemory>
         <SequenceWithMemory>
           <ArmThrusters/>
           <SetGuidedMode/>
         </SequenceWithMemory>
-        <Fallback>
-          <SequenceWithMemory>
-            <ReactiveSequence>
-              <IsActionFeasible action_name="search_pipeline"/>
-              <search_pipeline/>
-            </ReactiveSequence>
-            <ReactiveSequence>
-              <IsActionFeasible action_name="inspect_pipeline"/>
-              <inspect_pipeline/>
-            </ReactiveSequence>
-          </SequenceWithMemory>
-          <ReactiveSequence>
-            <IsActionFeasible action_name="recharge"/>
-            <recharge/>
-          </ReactiveSequence>
-        </Fallback>
         <ReactiveSequence>
-          <IsPipelineFound/>
-          <IsPipelineInspected/>
+          <Fallback>
+            <SequenceWithMemory>
+              <Fallback>
+                <IsPipelineFound/>
+                <ReactiveSequence>
+                  <IsActionFeasible action_name="search_pipeline"/>
+                  <search_pipeline/>
+                </ReactiveSequence>
+              </Fallback>
+              <Fallback>
+                <IsPipelineInspected/>
+                <ReactiveSequence>
+                  <IsActionFeasible action_name="inspect_pipeline"/>
+                  <inspect_pipeline/>
+                </ReactiveSequence>
+              </Fallback>
+            </SequenceWithMemory>
+            <ReactiveSequence>
+              <IsActionFeasible action_name="recharge"/>
+              <recharge/>
+            </ReactiveSequence>
+          </Fallback>
+          <ReactiveSequence>
+            <IsPipelineFound/>
+            <IsPipelineInspected/>
+          </ReactiveSequence>
         </ReactiveSequence>
-      </Sequence>
+      </SequenceWithMemory>
     </RetryUntilSuccessful>
   </BehaviorTree>
 
@@ -57,12 +65,12 @@
   <TreeNodesModel>
     <Action ID="ArmThrusters"
             editable="true"/>
-    <Condition ID="IsPipelineFound"/>
-    <Condition ID="IsPipelineInspected"/>
     <Condition ID="IsActionFeasible"
                editable="true">
       <input_port name="action_name"/>
     </Condition>
+    <Condition ID="IsPipelineFound"/>
+    <Condition ID="IsPipelineInspected"/>
     <Action ID="SetGuidedMode"
             editable="true"/>
     <Action ID="inspect_pipeline"/>
