@@ -21,7 +21,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/bool.hpp"
 
-#include "rosa_plan/rosa_action.hpp"
+#include "rosa_task_plan_bt/rosa_action.hpp"
 
 using namespace std::placeholders;
 
@@ -29,12 +29,12 @@ namespace suave_rosa_bt
 {
 
 template<class T>
-class SearchPipeline : public rosa_plan::RosaAction<T>{
+class SearchPipeline : public rosa_task_plan_bt::RosaAction<T>{
 
 public:
   SearchPipeline(
     const std::string& name, const BT::NodeConfig & conf)
-  : rosa_plan::RosaAction<T>(name, conf), _pipeline_detected(false)
+  : rosa_task_plan_bt::RosaAction<T>(name, conf), _pipeline_detected(false)
   {
     pipeline_detection_sub_  = this->_node->template create_subscription<std_msgs::msg::Bool>(
       "/pipeline/detected",
@@ -44,7 +44,7 @@ public:
 
   BT::NodeStatus onStart(){
     this->_node->template set_search_started();
-    return rosa_plan::RosaAction<T>::onStart();
+    return rosa_task_plan_bt::RosaAction<T>::onStart();
   };
 
   BT::NodeStatus onRunning() override{

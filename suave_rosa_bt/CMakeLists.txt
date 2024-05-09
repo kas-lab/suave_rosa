@@ -14,7 +14,7 @@ find_package(behaviortree_cpp REQUIRED)
 find_package(mavros_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rosa_msgs REQUIRED)
-find_package(rosa_plan REQUIRED)
+find_package(rosa_task_plan_bt REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 
@@ -24,7 +24,7 @@ set(dependencies
   mavros_msgs
   rclcpp
   rosa_msgs
-  rosa_plan
+  rosa_task_plan_bt
   std_msgs
   std_srvs
 )

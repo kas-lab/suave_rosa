@@ -12,6 +12,11 @@
   <depend>rosa_msgs</depend>
   <depend>rosa_task_plan_plansys</depend>
   <depend>rclcpp</depend>
+  <depend>rosa_kb</depend>
+  <depend>suave</depend>
+  <depend>suave_msgs</depend>
+  <depend>mavros</depend>
+  <depend>mavros_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

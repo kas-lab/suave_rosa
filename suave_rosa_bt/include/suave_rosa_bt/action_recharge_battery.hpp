@@ -21,7 +21,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/bool.hpp"
 
-#include "rosa_plan/rosa_action.hpp"
+#include "rosa_task_plan_bt/rosa_action.hpp"
 
 using namespace std::placeholders;
 
@@ -29,12 +29,12 @@ namespace suave_rosa_bt
 {
 
 template<class T>
-class RechargeBattery : public rosa_plan::RosaAction<T>{
+class RechargeBattery : public rosa_task_plan_bt::RosaAction<T>{
 
 public:
   RechargeBattery(
     const std::string& name, const BT::NodeConfig & conf)
-  : rosa_plan::RosaAction<T>(name, conf)
+  : rosa_task_plan_bt::RosaAction<T>(name, conf)
   {
     battery_level_sub  = this->_node->template create_subscription<std_msgs::msg::Bool>(
       "/battery_monitor/recharge/complete",
@@ -46,7 +46,7 @@ public:
     std::cout << "Async action starting: " << this->name() << std::endl;
     // _completion_time = std::chrono::system_clock::now() + std::chrono::milliseconds(5000);
     _recharged = false;
-    return rosa_plan::RosaAction<T>::onStart();
+    return rosa_task_plan_bt::RosaAction<T>::onStart();
   };
 
   BT::NodeStatus onRunning() override {
