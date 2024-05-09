@@ -83,8 +83,8 @@ def generate_launch_description():
         )
 
     rosa_plansys_controller_node = Node(
-        package='rosa_task_plan_plansys',
-        executable='rosa_plansys_controller_node',
+        package='suave_rosa_plansys',
+        executable='suave_rosa_controller',
         # parameters=[mission_config]
         parameters=[{'rosa_actions': ['search_pipeline', 'inspect_pipeline']}]
     )
