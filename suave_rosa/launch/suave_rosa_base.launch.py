@@ -30,6 +30,7 @@ def generate_launch_description():
     result_filename = LaunchConfiguration('result_filename')
     mission_config = LaunchConfiguration('mission_config')
     db_name = LaunchConfiguration('db_name')
+    data_path = LaunchConfiguration('data_path')
 
     mission_type_arg = DeclareLaunchArgument(
         'mission_type',
@@ -62,6 +63,16 @@ def generate_launch_description():
         description='ROSA db name'
     )
 
+    pkg_suave_rosa = get_package_share_directory(
+        'suave_rosa')
+    data_path_ = "[{}]".format(
+        os.path.join(pkg_suave_rosa, 'config', 'suave.tql'))
+    data_path_arg = DeclareLaunchArgument(
+        'data_path',
+        default_value=data_path_,
+        description='typeQL file to use for data'
+    )
+
     pkg_rosa_kb = get_package_share_directory(
         'rosa_kb')
 
@@ -79,15 +90,9 @@ def generate_launch_description():
         'launch',
         'suave.launch.py')
 
-    pkg_suave_rosa = get_package_share_directory(
-        'suave_rosa')
-
     schema_path = "[{0}, {1}]".format(
         os.path.join(pkg_rosa_kb, 'config', 'schema.tql'),
         os.path.join(pkg_rosa_kb, 'config', 'ros_schema.tql'))
-
-    data_path = "[{}]".format(
-        os.path.join(pkg_suave_rosa, 'config', 'suave.tql'))
 
     rosa_bringup = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(rosa_bringup_launch_path),
@@ -135,6 +140,7 @@ def generate_launch_description():
         result_filename_arg,
         mission_config_arg,
         db_name_arg,
+        data_path_arg,
         rosa_bringup,
         suave_launch,
         mission_metrics_node,

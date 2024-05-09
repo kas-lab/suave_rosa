@@ -53,6 +53,10 @@ def generate_launch_description():
         'mission_config.yaml'
     )
 
+    data_path_ = "[{0}, {1}]".format(
+        os.path.join(pkg_suave_rosa, 'config', 'suave.tql'),
+        os.path.join(pkg_suave_rosa, 'config', 'suave_extended.tql'),
+    )
     suave_rosa_base = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(suave_rosa_path),
         launch_arguments={
@@ -60,6 +64,7 @@ def generate_launch_description():
             'result_filename': result_filename,
             'mission_config': mission_config,
             'db_name': 'suave_rosa_extended_bt',
+            'data_path': data_path_
         }.items()
     )
 
