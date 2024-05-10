@@ -113,7 +113,7 @@ def generate_launch_description():
     )
 
     mission_metrics_node = Node(
-        package='suave_missions',
+        package='suave_metrics',
         executable='mission_metrics',
         name='mission_metrics',
         parameters=[mission_config, {
@@ -124,7 +124,7 @@ def generate_launch_description():
     )
 
     mission_metrics_node_override = Node(
-        package='suave_missions',
+        package='suave_metrics',
         executable='mission_metrics',
         name='mission_metrics',
         parameters=[mission_config, {
