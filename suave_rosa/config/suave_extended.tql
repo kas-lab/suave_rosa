@@ -11,7 +11,7 @@ $a_recharge isa Action, has action-name "recharge";
 $f_generate_recharge_path isa Function, has function-name "generate recharge path";
 (action:$a_recharge, required-function:$f_generate_recharge_path, required-function:$f_recover_motion) isa functional-requirement;
 
-$c_generate_recharge_path_node isa LifeCycleNode, has component-name "recharge_battery", has package "suave", has executable "recharge_battery";
+$c_generate_recharge_path_node isa LifeCycleNode, has component-name "generate_recharge_path_node", has package "suave", has executable "recharge_battery";
 (function: $f_generate_recharge_path, required-component: $c_generate_recharge_path_node) isa function-design, has function-design-name "generate recharge path function design";
 ## end recharge action
 
