@@ -43,7 +43,7 @@ public:
         rclcpp::CallbackGroupType::MutuallyExclusive);
       // TODO: create parameter for timer rate?
       time_limit_timer_ = this->create_wall_timer(
-        1s, std::bind(&SuaveRosaController::time_limit_cb, this), time_limit_timer_cb_group_);
+        100ms, std::bind(&SuaveRosaController::time_limit_cb, this), time_limit_timer_cb_group_);
   };
 
 private:
