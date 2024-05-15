@@ -5,25 +5,23 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# set(CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  "${CMAKE_CURRENT_LIST_DIR}/cmake")
-# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(behaviortree_cpp REQUIRED)
-find_package(mavros_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rosa_msgs REQUIRED)
 find_package(rosa_task_plan_bt REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(suave_bt REQUIRED)
 
 set(dependencies
   ament_index_cpp
   behaviortree_cpp
-  mavros_msgs
   rclcpp
   rosa_msgs
+  suave_bt
   rosa_task_plan_bt
   std_msgs
   std_srvs
@@ -36,27 +34,20 @@ include_directories(
 add_library(action_search_pipeline_bt_node SHARED src/suave_rosa_bt/action_search_pipeline.cpp)
 add_library(action_inspect_pipeline_bt_node SHARED src/suave_rosa_bt/action_inspect_pipeline.cpp)
 add_library(action_recharge_battery_bt_node SHARED src/suave_rosa_bt/action_recharge_battery.cpp)
-add_library(is_pipeline_found_bt_node SHARED src/suave_rosa_bt/is_pipeline_found.cpp)
-add_library(is_pipeline_inspected_bt_node SHARED src/suave_rosa_bt/is_pipeline_inspected.cpp)
-add_library(arm_thrusters_bt_node SHARED src/suave_rosa_bt/arm_thrusters.cpp)
-add_library(set_guided_mode_bt_node SHARED src/suave_rosa_bt/set_guided_mode.cpp)
-
-add_library(suave_mission SHARED src/suave_rosa_bt/suave_mission.cpp)
 
 list(APPEND plugin_libs
   action_search_pipeline_bt_node
   action_inspect_pipeline_bt_node
   action_recharge_battery_bt_node
-  is_pipeline_found_bt_node
-  is_pipeline_inspected_bt_node
-  arm_thrusters_bt_node
-  set_guided_mode_bt_node
-  suave_mission
 )
 
 foreach(bt_plugin ${plugin_libs})
+  target_compile_features(${bt_plugin} PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+  target_include_directories(${bt_plugin} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
   ament_target_dependencies(${bt_plugin} ${dependencies})
-  target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)
+  target_compile_definitions(${bt_plugin} PRIVATE "SUAVE_ROSA_BT_BUILDING_LIBRARY")
 endforeach()
 
 add_executable(suave_rosa_bt src/suave_rosa_bt.cpp)
