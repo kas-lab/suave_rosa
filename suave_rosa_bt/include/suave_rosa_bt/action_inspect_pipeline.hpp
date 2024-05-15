@@ -34,9 +34,9 @@ class InspectPipeline : public rosa_task_plan_bt::RosaAction<T>{
 public:
   InspectPipeline(
     const std::string& name, const BT::NodeConfig & conf)
-  : rosa_task_plan_bt::RosaAction<T>(name, conf), _pipeline_inspected(false)
+  : rosa_task_plan_bt::RosaAction<T>(name, conf), pipeline_inspected_(false)
   {
-    pipeline_inspected_sub_  = this->_node->template create_subscription<std_msgs::msg::Bool>(
+    pipeline_inspected_sub_  = this->node_->template create_subscription<std_msgs::msg::Bool>(
       "/pipeline/inspected",
       10,
       std::bind(&InspectPipeline::pipeline_inspected_cb, this, _1));
@@ -45,13 +45,13 @@ public:
   BT::NodeStatus onRunning() override {
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-    if(this->_node->template time_limit_reached()){
+    if(this->node_->template time_limit_reached()){
       std::cout << "Time limit reached. Canceling action "<< this->name() << std::endl;
       this->cancel_action();
       return BT::NodeStatus::FAILURE;
     }
 
-    if(_pipeline_inspected==true){
+    if(pipeline_inspected_==true){
       std::cout << "Async action finished: "<< this->name() << std::endl;
       this->cancel_action();
       return BT::NodeStatus::SUCCESS;
@@ -68,10 +68,10 @@ public:
   }
 
 private:
-  bool _pipeline_inspected;
+  bool pipeline_inspected_;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr pipeline_inspected_sub_;
   void pipeline_inspected_cb(const std_msgs::msg::Bool &msg){
-    _pipeline_inspected = msg.data;
+    pipeline_inspected_ = msg.data;
   };
 };
 

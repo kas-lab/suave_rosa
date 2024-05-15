@@ -36,7 +36,7 @@ public:
     const std::string& name, const BT::NodeConfig & conf)
   : rosa_task_plan_bt::RosaAction<T>(name, conf)
   {
-    battery_level_sub  = this->_node->template create_subscription<std_msgs::msg::Bool>(
+    battery_level_sub_  = this->node_->template create_subscription<std_msgs::msg::Bool>(
       "/battery_monitor/recharge/complete",
       10,
       std::bind(&RechargeBattery::battery_level_cb, this, _1));
@@ -45,20 +45,20 @@ public:
   BT::NodeStatus onStart(){
     std::cout << "Async action starting: " << this->name() << std::endl;
     // _completion_time = std::chrono::system_clock::now() + std::chrono::milliseconds(5000);
-    _recharged = false;
+    recharged_ = false;
     return rosa_task_plan_bt::RosaAction<T>::onStart();
   };
 
   BT::NodeStatus onRunning() override {
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-    if(this->_node->template time_limit_reached()){
+    if(this->node_->template time_limit_reached()){
       std::cout << "Time limit reached. Canceling action "<< this->name() << std::endl;
       this->cancel_action();
       return BT::NodeStatus::FAILURE;
     }
 
-    if(_recharged == true){
+    if(recharged_ == true){
       std::cout << "Async action finished: "<< this->name() << std::endl;
       this->cancel_action();
       return BT::NodeStatus::SUCCESS;
@@ -76,10 +76,10 @@ public:
 
 private:
   // std::chrono::system_clock::time_point _completion_time;
-  bool _recharged = false;
-  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr battery_level_sub;
+  bool recharged_ = false;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr battery_level_sub_;
   void battery_level_cb(const std_msgs::msg::Bool &msg){
-    _recharged = msg.data;
+    recharged_ = msg.data;
   };
 };
 

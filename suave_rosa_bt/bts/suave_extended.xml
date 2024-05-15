@@ -3,79 +3,65 @@
       main_tree_to_execute="MainTree">
   <BehaviorTree ID="MainTree">
     <RetryUntilSuccessful num_attempts="-1">
-      <SequenceWithMemory>
+      <Fallback>
+        <is_mission_aborted/>
         <SequenceWithMemory>
-          <ArmThrusters/>
-          <SetGuidedMode/>
-        </SequenceWithMemory>
-        <ReactiveSequence>
-          <Fallback>
-            <SequenceWithMemory>
-              <Fallback>
-                <IsPipelineFound/>
-                <ReactiveSequence>
-                  <IsActionFeasible action_name="search_pipeline"/>
-                  <search_pipeline/>
-                </ReactiveSequence>
-              </Fallback>
-              <Fallback>
-                <IsPipelineInspected/>
-                <ReactiveSequence>
-                  <IsActionFeasible action_name="inspect_pipeline"/>
-                  <inspect_pipeline/>
-                </ReactiveSequence>
-              </Fallback>
-            </SequenceWithMemory>
-            <ReactiveSequence>
-              <IsActionFeasible action_name="recharge"/>
-              <recharge/>
-            </ReactiveSequence>
-          </Fallback>
+          <SequenceWithMemory>
+            <arm_thrusters/>
+            <set_guided_mode/>
+          </SequenceWithMemory>
           <ReactiveSequence>
-            <IsPipelineFound/>
-            <IsPipelineInspected/>
+            <Fallback>
+              <SequenceWithMemory>
+                <Fallback>
+                  <is_pipeline_found/>
+                  <ReactiveSequence>
+                    <is_action_feasible action_name="search_pipeline"/>
+                    <search_pipeline/>
+                  </ReactiveSequence>
+                </Fallback>
+                <Fallback>
+                  <is_pipeline_inspected/>
+                  <ReactiveSequence>
+                    <is_action_feasible action_name="inspect_pipeline"/>
+                    <inspect_pipeline/>
+                  </ReactiveSequence>
+                </Fallback>
+              </SequenceWithMemory>
+              <ReactiveSequence>
+                <is_action_feasible action_name="recharge"/>
+                <recharge/>
+              </ReactiveSequence>
+            </Fallback>
+            <ReactiveSequence>
+              <is_pipeline_found/>
+              <is_pipeline_inspected/>
+            </ReactiveSequence>
           </ReactiveSequence>
-        </ReactiveSequence>
-      </SequenceWithMemory>
+        </SequenceWithMemory>
+      </Fallback>
     </RetryUntilSuccessful>
-  </BehaviorTree>
-
-  <BehaviorTree ID="inspect_tree">
-    <ReactiveSequence>
-      <IsActionFeasible action_name="inspect_pipeline"/>
-      <inspect_pipeline/>
-    </ReactiveSequence>
-  </BehaviorTree>
-
-  <BehaviorTree ID="recharge_tree">
-    <ReactiveSequence>
-      <IsActionFeasible action_name="recharge"/>
-      <recharge/>
-    </ReactiveSequence>
-  </BehaviorTree>
-
-  <BehaviorTree ID="search_tree">
-    <ReactiveSequence>
-      <IsActionFeasible action_name="search_pipeline"/>
-      <search_pipeline/>
-    </ReactiveSequence>
   </BehaviorTree>
 
   <!-- Description of Node Models (used by Groot) -->
   <TreeNodesModel>
-    <Action ID="ArmThrusters"
+    <Action ID="arm_thrusters"
             editable="true"/>
-    <Condition ID="IsActionFeasible"
+    <Condition ID="is_action_feasible"
                editable="true">
       <input_port name="action_name"/>
     </Condition>
-    <Condition ID="IsPipelineFound"/>
-    <Condition ID="IsPipelineInspected"/>
-    <Action ID="SetGuidedMode"
+    <Condition ID="is_pipeline_found"/>
+    <Condition ID="is_pipeline_inspected"/>
+    <Action ID="set_guided_mode"
             editable="true"/>
-    <Action ID="inspect_pipeline"/>
+    <Action ID="inspect_pipeline"
+            editable="true"/>
+    <Condition ID="is_mission_aborted"
+               editable="true"/>
     <Action ID="recharge"/>
-    <Action ID="search_pipeline"/>
+    <Action ID="search_pipeline"
+            editable="true"/>
   </TreeNodesModel>
 
 </root>
