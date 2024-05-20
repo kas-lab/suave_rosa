@@ -13,20 +13,14 @@
           <ReactiveSequence>
             <Fallback>
               <SequenceWithMemory>
-                <Fallback>
-                  <is_pipeline_found/>
-                  <ReactiveSequence>
-                    <is_action_feasible action_name="search_pipeline"/>
-                    <search_pipeline/>
-                  </ReactiveSequence>
-                </Fallback>
-                <Fallback>
-                  <is_pipeline_inspected/>
-                  <ReactiveSequence>
-                    <is_action_feasible action_name="inspect_pipeline"/>
-                    <inspect_pipeline/>
-                  </ReactiveSequence>
-                </Fallback>
+                <ReactiveSequence>
+                  <is_action_feasible action_name="search_pipeline"/>
+                  <search_pipeline/>
+                </ReactiveSequence>
+                <ReactiveSequence>
+                  <is_action_feasible action_name="inspect_pipeline"/>
+                  <inspect_pipeline/>
+                </ReactiveSequence>
               </SequenceWithMemory>
               <ReactiveSequence>
                 <is_action_feasible action_name="recharge"/>
@@ -47,20 +41,20 @@
   <TreeNodesModel>
     <Action ID="arm_thrusters"
             editable="true"/>
+    <Action ID="inspect_pipeline"
+            editable="true"/>
     <Condition ID="is_action_feasible"
                editable="true">
       <input_port name="action_name"/>
     </Condition>
-    <Condition ID="is_pipeline_found"/>
-    <Condition ID="is_pipeline_inspected"/>
-    <Action ID="set_guided_mode"
-            editable="true"/>
-    <Action ID="inspect_pipeline"
-            editable="true"/>
     <Condition ID="is_mission_aborted"
                editable="true"/>
+    <Condition ID="is_pipeline_found"/>
+    <Condition ID="is_pipeline_inspected"/>
     <Action ID="recharge"/>
     <Action ID="search_pipeline"
+            editable="true"/>
+    <Action ID="set_guided_mode"
             editable="true"/>
   </TreeNodesModel>
 
