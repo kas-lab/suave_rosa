@@ -66,3 +66,8 @@ Or you can use a runner to execute the experiments multiple times (check SUAVE r
 ```bash
 ./rosa_runner.sh true rosa time 20
 ```
+
+build:
+```
+docker build --ssh default -t suave_rosa -f docker/Dockerfile .
+```

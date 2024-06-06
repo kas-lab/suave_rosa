@@ -12,18 +12,12 @@ COPY --chown=kasm-user:kasm-user docker/install_typedb.sh $HOME/suave_ws/src/sua
 WORKDIR $HOME/suave_ws/src/suave_rosa/docker/
 RUN ["/bin/bash", "-c", "./install_typedb.sh"]
 
-COPY --chown=kasm-user:kasm-user ./bts/ $HOME/suave_ws/src/suave_rosa/bts/
-COPY --chown=kasm-user:kasm-user ./cmake/ $HOME/suave_ws/src/suave_rosa/cmake/
-COPY --chown=kasm-user:kasm-user ./config/ $HOME/suave_ws/src/suave_rosa/config/
-COPY --chown=kasm-user:kasm-user ./include/ $HOME/suave_ws/src/suave_rosa/include/
-COPY --chown=kasm-user:kasm-user ./launch/ $HOME/suave_ws/src/suave_rosa/launch/
-COPY --chown=kasm-user:kasm-user ./src/ $HOME/suave_ws/src/suave_rosa/src/
-COPY --chown=kasm-user:kasm-user CMakeLists.txt $HOME/suave_ws/src/suave_rosa/CMakeLists.txt
-COPY --chown=kasm-user:kasm-user package.xml $HOME/suave_ws/src/suave_rosa/package.xml
+COPY --chown=kasm-user:kasm-user suave_rosa/ $HOME/suave_ws/src/suave_rosa/
+COPY --chown=kasm-user:kasm-user suave_rosa_bt/ $HOME/suave_ws/src/suave_rosa_bt/
+COPY --chown=kasm-user:kasm-user suave_rosa_plansys/ $HOME/suave_ws/src/suave_rosa_plansys/
 COPY --chown=kasm-user:kasm-user suave_rosa.rosinstall $HOME/suave_ws/src/suave_rosa/suave_rosa.rosinstall
 
 WORKDIR $HOME/suave_ws
-# RUN --mount=type=ssh,uid=1000 git clone git@github.com:kas-lab/rosa.git
 RUN --mount=type=ssh,uid=1000 vcs import src < src/suave_rosa/suave_rosa.rosinstall --force
 
 
