@@ -8,6 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(mavros_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(rosa_task_plan_plansys REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(plansys2_executor REQUIRED)
@@ -17,6 +18,7 @@ find_package(rosa_task_plan_plansys REQUIRED)
 set(dependencies
   ament_cmake
   mavros_msgs
+  std_msgs
   rclcpp
   plansys2_executor
   rosa_task_plan_plansys
