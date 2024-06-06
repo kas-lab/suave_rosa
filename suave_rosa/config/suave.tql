@@ -23,9 +23,9 @@ $cc2 (component: $c0, parameter: $cp2) isa component-configuration, has componen
 
 $water_visibility isa EnvironmentalAttribute, has attribute-name "water_visibility";
 
-(constraint: $water_visibility, constrained: $cc0) isa constraint, has attribute-value 1.25, has constraint-operator ">=";
-(constraint: $water_visibility, constrained: $cc1) isa constraint, has attribute-value 2.25, has constraint-operator ">=";
-(constraint: $water_visibility, constrained: $cc2) isa constraint, has attribute-value 3.25, has constraint-operator ">=";
+(constraint: $water_visibility, constrained: $cc0) isa greater-equal-constraint, has attribute-value 1.25;
+(constraint: $water_visibility, constrained: $cc1) isa greater-equal-constraint, has attribute-value 2.25;
+(constraint: $water_visibility, constrained: $cc2) isa greater-equal-constraint, has attribute-value 3.25;
 
 ## Component recover motion node and configurations
 $c1 isa LifeCycleNode, has component-name "f_maintain_motion_node", has package "suave", has executable "recover_thrusters";

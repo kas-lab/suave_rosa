@@ -39,5 +39,5 @@ $battery_level_qa isa QualityAttribute, has attribute-name "battery_level";
 #$light_high_brightnes_water_visbility (causer: $light_high_brightness, affected: $water_visibility) isa estimation, has estimation-value 0.90, has estimation-type "positive";
 
 # Actions constraints
-(constraint: $battery_level_qa, constrained: $a_search_pipeline) isa constraint, has attribute-value 0.25;
-(constraint: $battery_level_qa, constrained: $a_inspect_pipeline) isa constraint, has attribute-value 0.25;
+(constraint: $battery_level_qa, constrained: $a_search_pipeline) isa greater-equal-constraint, has attribute-value 0.25;
+(constraint: $battery_level_qa, constrained: $a_inspect_pipeline) isa greater-equal-constraint, has attribute-value 0.25;
