@@ -3,7 +3,7 @@
 if [ $# -lt 1 ]; then
 	echo "usage: $0 gui adaptation_manager mission_type runs"
 	echo example:
-	echo "  "$0 "[true | false] [metacontrol | random | none | bt | rosa] [time | distance] runs(integer)"
+	echo "  "$0 "[true | false] [metacontrol | random | none | bt | rosa] [time | distance | extended] runs(integer)"
 	exit 1
 fi
 
@@ -38,7 +38,7 @@ else
     exit 1
 fi
 
-if [ "$3" == "time" ] || [ "$3" == "distance" ];
+if [ "$3" == "time" ] || [ "$3" == "distance" ] || [ "$3" == "extended" ];
 then
     MTYPE=$3
 else
