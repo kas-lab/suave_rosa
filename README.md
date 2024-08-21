@@ -55,9 +55,9 @@ ros2 launch suave_rosa suave_rosa_extended.launch.py mission_type:=time_constrai
 
 The SUAVE docker image was extended to include ROSA. You can find additional information about the original SUAVE image in the SUAVE repo.
 
-Run with docker **DOCKER IMAGE IS NOT AVAILABLE DUE TO DOUBLE-BLIND REVIEW. IT WILL BE AVAILABLE AFTER REVIEW.**:
+Run with docker:
 ```bash
-docker run -it --shm-size=512m -v $HOME/rss_results:/home/kasm-user/suave/results -p 6901:6901 -e VNC_PW=password --security-opt seccomp=unconfined ghcr.io/kas-lab/suave_rosa:main
+docker run -it --shm-size=512m -v $HOME/suave_rosa_results:/home/kasm-user/suave/results -p 6901:6901 -e VNC_PW=password --security-opt seccomp=unconfined ghcr.io/kas-lab/suave_rosa:main
 ```
 
 You can run SUAVE + ROSA with the instructions in the [running section](##running)
@@ -69,5 +69,5 @@ Or you can use a runner to execute the experiments multiple times (check SUAVE r
 
 build:
 ```
-docker build --ssh default -t suave_rosa -f docker/Dockerfile .
+docker build -t suave_rosa -f docker/Dockerfile .
 ```
