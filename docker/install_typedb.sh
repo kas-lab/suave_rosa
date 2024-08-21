@@ -7,5 +7,5 @@ echo "deb https://repo.typedb.com/public/public-release/deb/ubuntu trusty main" 
 
 sudo apt update
 sudo apt install openjdk-11-jre
-sudo apt install typedb=2.27.0
-pip3 install typedb-driver==2.27.0
+sudo apt install typedb
+pip3 install typedb-driver

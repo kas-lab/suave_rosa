@@ -1,4 +1,5 @@
 FROM ghcr.io/kas-lab/suave:main
+# FROM suave:dev
 
 RUN sudo apt update \
     && sudo apt install -y \
@@ -18,7 +19,9 @@ COPY --chown=kasm-user:kasm-user suave_rosa_plansys/ $HOME/suave_ws/src/suave_ro
 COPY --chown=kasm-user:kasm-user suave_rosa.rosinstall $HOME/suave_ws/src/suave_rosa/suave_rosa.rosinstall
 
 WORKDIR $HOME/suave_ws
-RUN --mount=type=ssh,uid=1000 vcs import src < src/suave_rosa/suave_rosa.rosinstall --force
+RUN wget https://github.com/kas-lab/suave/blob/main/suave.rosinstall
+RUN vcs import src < suave.rosinstall
+RUN vcs import src < src/suave_rosa/suave_rosa.rosinstall --force
 
 
 RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash \
@@ -35,6 +38,6 @@ RUN sudo apt autoremove -y && sudo rm -rf /var/lib/apt/lists/
 
 COPY --chown=kasm-user:kasm-user ./runner/ $HOME/suave_ws/src/suave/runner/
 RUN chmod +x $HOME/suave_ws/src/suave/runner/rosa_runner.sh
-RUN chmod +x $HOME/suave_ws/src/suave/runner/rosa_conf_results_run.sh
+RUN chmod +x $HOME/suave_ws/src/suave/runner/rosa_paper_results_run.sh
 RUN chmod +x $HOME/suave_ws/src/suave/runner/scripts/launch_mission.sh
 WORKDIR $HOME/suave_ws/src/suave/runner
