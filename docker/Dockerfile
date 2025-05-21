@@ -16,12 +16,13 @@ RUN ["/bin/bash", "-c", "./install_typedb.sh"]
 COPY --chown=kasm-user:kasm-user suave_rosa/ $HOME/suave_ws/src/suave_rosa/
 COPY --chown=kasm-user:kasm-user suave_rosa_bt/ $HOME/suave_ws/src/suave_rosa_bt/
 COPY --chown=kasm-user:kasm-user suave_rosa_plansys/ $HOME/suave_ws/src/suave_rosa_plansys/
-COPY --chown=kasm-user:kasm-user suave_rosa.rosinstall $HOME/suave_ws/src/suave_rosa/suave_rosa.rosinstall
+COPY --chown=kasm-user:kasm-user suave_rosa.repos $HOME/suave_ws/src/suave_rosa/suave_rosa.repos
+COPY --chown=ubuntu-user:ubuntu-user suave_rosa_runner/ $HOME/suave_ws/src/suave_rosa_runner/
 
 WORKDIR $HOME/suave_ws
-RUN wget https://github.com/kas-lab/suave/blob/main/suave.rosinstall
-RUN vcs import src < suave.rosinstall
-RUN vcs import src < src/suave_rosa/suave_rosa.rosinstall --force
+RUN wget https://raw.githubusercontent.com/kas-lab/suave/refs/heads/main/suave.repos
+RUN vcs import src < suave.repos
+RUN vcs import src < src/suave_rosa/suave_rosa.repos --force
 
 
 RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash \

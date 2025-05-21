@@ -18,16 +18,24 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
-# from launch.actions import SetEnvironmentVariable
+from launch.actions import OpaqueFunction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    # stdout_linebuf_envvar = SetEnvironmentVariable(
-    #     'RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1')
-
+    silent = LaunchConfiguration('silent')
+    silent_arg = DeclareLaunchArgument(
+        'silent',
+        default_value='false',
+        description='Suppress all output (launch logs + node logs)'
+    )
+    def configure_logging(context, *args, **kwargs):
+        if silent.perform(context) == 'true':
+            import logging
+            logging.getLogger().setLevel(logging.CRITICAL)
+        return []
     mission_type = LaunchConfiguration('mission_type')
     result_filename = LaunchConfiguration('result_filename')
 
@@ -40,7 +48,7 @@ def generate_launch_description():
 
     result_filename_arg = DeclareLaunchArgument(
         'result_filename',
-        default_value='',
+        default_value='suave_rosa_plansys_results',
         description='Name of the results file'
     )
 
@@ -113,6 +121,8 @@ def generate_launch_description():
     return LaunchDescription([
         mission_type_arg,
         result_filename_arg,
+        silent_arg,
+        OpaqueFunction(function=configure_logging),
         suave_rosa_base,
         plansys2_bringup,
         rosa_plansys_controller_node,

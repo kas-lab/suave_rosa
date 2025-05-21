@@ -17,12 +17,13 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.actions import ExecuteProcess
 from launch.actions import IncludeLaunchDescription
-from launch.conditions import LaunchConfigurationEquals
-from launch.conditions import LaunchConfigurationNotEquals
+from launch.actions import RegisterEventHandler
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from launch.event_handlers import OnProcessStart
 
 
 def generate_launch_description():
@@ -40,7 +41,7 @@ def generate_launch_description():
 
     result_filename_arg = DeclareLaunchArgument(
         'result_filename',
-        default_value='',
+        default_value='rosa_results',
         description='Name of the results file'
     )
 
@@ -72,9 +73,6 @@ def generate_launch_description():
         description='typeQL file to use for data'
     )
 
-    pkg_rosa_kb = get_package_share_directory(
-        'rosa_kb')
-
     pkg_rosa_bringup = get_package_share_directory(
         'rosa_bringup')
     rosa_bringup_launch_path = os.path.join(
@@ -89,14 +87,9 @@ def generate_launch_description():
         'launch',
         'suave.launch.py')
 
-    schema_path = "[{0}, {1}]".format(
-        os.path.join(pkg_rosa_kb, 'config', 'schema.tql'),
-        os.path.join(pkg_rosa_kb, 'config', 'ros_schema.tql'))
-
     rosa_bringup = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(rosa_bringup_launch_path),
         launch_arguments={
-            'schema_path': schema_path,
             'data_path': data_path,
             'database_name': db_name,
             'force_data': 'True',
@@ -118,20 +111,22 @@ def generate_launch_description():
         parameters=[mission_config, {
             'adaptation_manager': 'rosa',
             'mission_name': mission_type,
-        }],
-        condition=LaunchConfigurationEquals('result_filename', '')
-    )
-
-    mission_metrics_node_override = Node(
-        package='suave_metrics',
-        executable='mission_metrics',
-        name='mission_metrics',
-        parameters=[mission_config, {
-            'adaptation_manager': 'rosa',
-            'mission_name': mission_type,
             'result_filename': result_filename,
         }],
-        condition=LaunchConfigurationNotEquals('result_filename', '')
+    )
+
+    typedb_server = ExecuteProcess(
+        cmd=['typedb', 'server'],
+        name='typedb_server',
+        output='screen'
+    )
+
+    # Include another launch file after typedb starts
+    event_launch_rosa_bringup = RegisterEventHandler(
+        OnProcessStart(
+            target_action=typedb_server,
+            on_start=[rosa_bringup]
+        )
     )
 
     return LaunchDescription([
@@ -140,8 +135,8 @@ def generate_launch_description():
         mission_config_arg,
         db_name_arg,
         data_path_arg,
-        rosa_bringup,
         suave_launch,
+        typedb_server,
+        event_launch_rosa_bringup,
         mission_metrics_node,
-        mission_metrics_node_override
     ])

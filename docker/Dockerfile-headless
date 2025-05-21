@@ -1,0 +1,27 @@
+FROM ghcr.io/kas-lab/suave-headless:latest
+
+COPY --chown=ubuntu-user:ubuntu-user docker/install_typedb.sh $HOME/suave_ws/src/suave_rosa/docker/install_typedb.sh
+WORKDIR $HOME/suave_ws/src/suave_rosa/docker/
+RUN ["/bin/bash", "-c", "./install_typedb.sh"]
+
+COPY --chown=ubuntu-user:ubuntu-user suave_rosa/ $HOME/suave_ws/src/suave_rosa/suave_rosa/
+COPY --chown=ubuntu-user:ubuntu-user suave_rosa_bt/ $HOME/suave_ws/src/suave_rosa/suave_rosa_bt/
+COPY --chown=ubuntu-user:ubuntu-user suave_rosa_plansys/ $HOME/suave_ws/src/suave_rosa/suave_rosa_plansys/
+COPY --chown=ubuntu-user:ubuntu-user suave_rosa_runner/ $HOME/suave_ws/src/suave_rosa/suave_rosa_runner/
+COPY --chown=ubuntu-user:ubuntu-user suave_rosa.repos $HOME/suave_ws/suave_rosa.repos
+
+WORKDIR $HOME/suave_ws
+RUN wget https://raw.githubusercontent.com/kas-lab/suave/refs/heads/main/suave.repos
+RUN vcs import src < suave.repos
+RUN vcs import src < suave_rosa.repos
+
+RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash \
+    && sudo apt update \
+    && rosdep update \
+    && rosdep install --from-paths src --ignore-src -r -y"]
+
+# Build suave
+RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash \
+    && colcon build --symlink-install"]
+
+RUN sudo apt autoremove -y && sudo rm -rf /var/lib/apt/lists/
