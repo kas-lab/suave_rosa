@@ -1,13 +1,13 @@
 # suave_rosa
 Applying ROSA to the SUAVE exemplar
 
-Tested with ubuntu 22.04 and ROS Humble
+Tested with Ubuntu 22.04 and ROS Humble
 
 ## Install
 
 Check the [SUAVE](https://github.com/kas-lab/suave) repo for additional installation instructions to install SUAVE.
 
-Create workspace and clone repo:
+Create a workspace and clone the repo:
 ```bash
 mkdir -p ~/suave_rosa_ws/src
 cd ~/suave_rosa_ws/src
@@ -35,7 +35,7 @@ The SUAVE docker images were extended to include ROSA. You can find additional i
 
 ### Docker with web interface
 
-Run with docker:
+Run with Docker:
 ```bash
 docker run -it --shm-size=512m -v $HOME/suave_rosa_results:/home/kasm-user/suave/results -p 6901:6901 -e VNC_PW=password --security-opt seccomp=unconfined ghcr.io/kas-lab/suave_rosa:main
 ```
