@@ -1,4 +1,5 @@
-FROM ghcr.io/kas-lab/suave-headless:latest
+ARG BASE_IMAGE=ghcr.io/kas-lab/suave-headless:latest
+FROM $BASE_IMAGE
 
 COPY --chown=ubuntu-user:ubuntu-user docker/install_typedb.sh $HOME/suave_ws/src/suave_rosa/docker/install_typedb.sh
 WORKDIR $HOME/suave_ws/src/suave_rosa/docker/

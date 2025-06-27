@@ -121,10 +121,11 @@ Or you can run it with the suave_runner ros node:
 ros2 run suave_runner suave_runner \
   --ros-args \
   -p gui:=False \
+  -p experiment_logging:=True \
   -p experiments:='[
     "{\"experiment_launch\": \"ros2 launch suave_rosa_bt suave_rosa_bt.launch.py\", \
-      \"num_runs\": 1, \
-      \"adaptation_manager\": \"rosa\", \
+      \"num_runs\": 20, \
+      \"adaptation_manager\": \"rosa_bt\", \
       \"mission_name\": \"suave\"}"
   ]'
 ```
