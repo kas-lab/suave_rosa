@@ -5,7 +5,7 @@
     experiments: #List of experiments to run
       - |
         {
-          "experiment_launch": "ros2 launch suave_bt suave_bt.launch.py",
+          "experiment_launch": "ros2 launch suave_rosa suave_rosa_bt.launch.py",
           "num_runs": 20,
           "adaptation_manager": "rosa",
           "mission_name": "suave"

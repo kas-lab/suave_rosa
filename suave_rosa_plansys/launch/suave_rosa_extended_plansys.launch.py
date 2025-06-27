@@ -47,6 +47,12 @@ def generate_launch_description():
                     '[time_constrained_mission or const_dist_mission]'
     )
 
+    result_path = LaunchConfiguration('result_path')
+    result_path_arg = DeclareLaunchArgument(
+        'result_path',
+        default_value='~/suave/results',
+        description='Path where to save the results'
+    )
     result_filename_arg = DeclareLaunchArgument(
         'result_filename',
         default_value='',
@@ -74,6 +80,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(suave_rosa_base_launch_path),
         launch_arguments={
             'mission_type': mission_type,
+            'result_path': result_path,
             'result_filename': result_filename,
             'mission_config': mission_config,
             'db_name': 'suave_rosa_extended_plansys',
@@ -134,6 +141,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         mission_type_arg,
+        result_path_arg,
         result_filename_arg,
         silent_arg,
         OpaqueFunction(function=configure_logging),

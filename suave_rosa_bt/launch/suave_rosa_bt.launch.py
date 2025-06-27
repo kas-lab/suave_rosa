@@ -47,6 +47,13 @@ def generate_launch_description():
         description='Mission name for logging'
     )
 
+    result_path = LaunchConfiguration('result_path')
+    result_path_arg = DeclareLaunchArgument(
+        'result_path',
+        default_value='~/suave/results',
+        description='Path where to save the results'
+    )
+
     result_filename_arg = DeclareLaunchArgument(
         'result_filename',
         default_value='rosa_results',
@@ -70,6 +77,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(suave_rosa_path),
         launch_arguments={
             'mission_type': mission_type,
+            'result_path': result_path,
             'result_filename': result_filename,
             'mission_config': mission_config,
             'db_name': 'suave_rosa_bt',
@@ -87,6 +95,7 @@ def generate_launch_description():
         OpaqueFunction(function=configure_logging),
         mission_type_arg,
         result_filename_arg,
+        result_path_arg,
         suave_rosa_base,
         suave_rosa_bt_node,
     ])

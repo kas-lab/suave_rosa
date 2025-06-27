@@ -133,10 +133,35 @@ ros2 run suave_runner suave_runner \
 ros2 run suave_runner suave_runner \
   --ros-args \
   -p gui:=False \
+  -p experiment_logging:=True \
   -p experiments:='[
     "{\"experiment_launch\": \"ros2 launch suave_rosa_bt suave_rosa_extended_bt.launch.py\", \
+      \"num_runs\": 20, \
+      \"adaptation_manager\": \"rosa_bt\", \
+      \"mission_name\": \"suave_extended\"}"
+  ]'
+```
+
+```Bash
+ros2 run suave_runner suave_runner \
+  --ros-args \
+  -p gui:=True \
+  -p experiments:='[
+    "{\"experiment_launch\": \"ros2 launch suave_rosa_plansys suave_rosa_plansys.launch.py\", \
       \"num_runs\": 1, \
-      \"adaptation_manager\": \"rosa\", \
+      \"adaptation_manager\": \"rosa_plansys\", \
+      \"mission_name\": \"suave\"}"
+  ]'
+```
+
+```Bash
+ros2 run suave_runner suave_runner \
+  --ros-args \
+  -p gui:=True \
+  -p experiments:='[
+    "{\"experiment_launch\": \"ros2 launch suave_rosa_plansys suave_rosa_extended_plansys.launch.py\", \
+      \"num_runs\": 1, \
+      \"adaptation_manager\": \"rosa_plansys\", \
       \"mission_name\": \"suave_extended\"}"
   ]'
 ```
