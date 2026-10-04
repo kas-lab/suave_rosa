@@ -2,7 +2,7 @@ match
     $a_search_pipeline isa Action, has action-name 'search_pipeline';
     $a_inspect_pipeline isa Action, has action-name 'inspect_pipeline';
     $f_recover_motion isa Function, has function-name 'recover motion';
-    $water_visibility isa EnvironmentalAttribute, has attribute-name "water_visibility";
+    $water_visibility isa EnvironmentalAttribute, has measure-name "water_visibility";
 insert
 # Extending SUAVE
 ## Recharge action and its functions, fds, and components
@@ -15,8 +15,8 @@ $c_generate_recharge_path_node isa LifeCycleNode, has component-name "generate_r
 (function: $f_generate_recharge_path, required-component: $c_generate_recharge_path_node) isa function-design, has function-design-name "generate recharge path function design";
 ## end recharge action
 
-$battery_level_qa isa QualityAttribute, has attribute-name "battery_level";
-#$battery_consumption_qa isa QualityAttribute, has attribute-name "battery_consumption";
+$battery_level_qa isa QualityAttribute, has measure-name "battery_level";
+#$battery_consumption_qa isa QualityAttribute, has measure-name "battery_consumption";
 
 #$light isa Component, has component-name "light";
 

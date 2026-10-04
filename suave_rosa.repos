@@ -6,11 +6,11 @@ repositories:
   ros_typedb:
     type: git
     url: https://github.com/kas-lab/ros_typedb.git
-    version: f16b079
+    version: 5172a6f
   rosa:
     type: git
     url: https://github.com/kas-lab/rosa.git
-    version: c7ea256
+    version: 49c195b
   plansys2:
     type: git
     url: https://github.com/PlanSys2/ros2_planning_system.git

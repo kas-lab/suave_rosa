@@ -9,9 +9,16 @@ RUN sudo apt update \
 # Download public key for github.com
 RUN USER=kasm-user mkdir -p ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-COPY --chown=kasm-user:kasm-user docker/install_typedb.sh $HOME/suave_ws/src/suave_rosa/docker/install_typedb.sh
-WORKDIR $HOME/suave_ws/src/suave_rosa/docker/
-RUN ["/bin/bash", "-c", "./install_typedb.sh"]
+## Install TypeDB
+RUN sudo gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 17507562824cfdcc && \
+    sudo gpg --export 17507562824cfdcc | sudo tee /etc/apt/trusted.gpg.d/vaticle.gpg > /dev/null && \
+    echo "deb https://repo.typedb.com/public/public-release/deb/ubuntu trusty main" | sudo tee /etc/apt/sources.list.d/vaticle.list > /dev/null
+
+RUN sudo apt-get update && sudo apt-get install -y \
+    typedb=2.29.1 \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install typedb-driver==2.29.7
 
 COPY --chown=kasm-user:kasm-user suave_rosa/ $HOME/suave_ws/src/suave_rosa/
 COPY --chown=kasm-user:kasm-user suave_rosa_bt/ $HOME/suave_ws/src/suave_rosa_bt/
